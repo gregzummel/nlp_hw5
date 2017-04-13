@@ -23,9 +23,13 @@ def compareVectors(a, b):
 
     return
 
-def findTopPassages():
+def findTopPassages(passages, question):
     return #something
     return #somethingelse
     return #evenmore
-    #take question
+    #per 10gram, take each question and find the best match.
+    return
+
+def questionProcessign(question):
     
+    return question
