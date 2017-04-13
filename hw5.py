@@ -24,12 +24,31 @@ def compareVectors(a, b):
     return
 
 def findTopPassages(passages, question):
-    return #something
-    return #somethingelse
-    return #evenmore
-    #per 10gram, take each question and find the best match.
+    
     return
 
-def questionProcessign(question):
-    
+
+def questionProcessing(question):
+    #determine what kind of question it is:
+    #remove stopwords
+
+        #who
+            #look for person.
+
+        #what
+            #more difficult. Noun Phrase
+        #when
+            #look for time
+        #where
+            #look for location
+        #how
+        #which
     return question
+
+def whoquestion(question):
+
+    return
+def whatquestion(question):
+    return
+def wherequestion(question):
+    return
