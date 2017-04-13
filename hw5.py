@@ -13,7 +13,7 @@ def readDocuments(document):
     text = ""
     n = 10
     tengrams = ngrams(text.split(), n)
-    return tengrames
+    return tengrams
 
 def compareVectors(a, b):
     #comparing two vectors to one another.
