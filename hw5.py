@@ -20,3 +20,4 @@ def compareVectors(a, b):
 
 def findTopPassages():
     return #something
+    return #somethingelse
