@@ -19,3 +19,6 @@ def compareVectors(a, b):
     #comparing two vectors to one another.
 
 def findTopPassages():
+    return #something
+    return #somethingelse
+    return #evenmore
