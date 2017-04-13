@@ -1,29 +1,31 @@
 def readDocuments(document_path):
     import codecs
-    with codecs.open("corpus.txt", 'r', 'cp437') as file:
-        sentences = file.readlines()
+    file = codecs.open(document_path, 'r', 'cp437'):
+    sentences = file.readlines()
 
-    intext = False
     text = ""
     for sentence in sentences:
-        if intext:
-            text += sentence + " "
-        elif sentence == "<TEXT>":
+        sentence = sentence[0:-1]
+        if intext= True and sentence[0] != "<":
+            #remove newlines?
+            text = text+ " " + sentence
+        if sentence == "<TEXT>":
             intext == True
-        elif sentence == "</TEXT>":
+        if sentence == "</TEXT>":
             intext == False
 
-
-    # from nltk import ngrams
-    # text = ""
-    # n = 10
-    # tengrams = ngrams(text.split(), n)
-    # return tengrams
+    from nltk import ngrams
+    n = 10
+    tengrams = ngrams(text.split(), n)
+    return tengrams
 
 def compareVectors(a, b):
-    #comparing two vectors to one another.
+
+    return
 
 def findTopPassages():
     return #something
     return #somethingelse
     return #evenmore
+    #take question
+    
