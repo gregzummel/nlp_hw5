@@ -52,9 +52,22 @@ def main(traintest):
     for number in questions.keys():
         question = questions[number]
         guess = questionProcessing(question)
-        if guess[0] == "Who":
-            print(guess)
-            print(question)
+        if guess == "Who":
+            whoquestion(question, number, traintest)
+        elif guess == "Where":
+            continue
+            #do where
+        elif guess == "How":
+            continue
+            #do how
+        elif guess == "When":
+            continue
+            #do when function
+        elif guess == "What":
+            continue
+            #do what function
+        else:
+            print(guess, question)
 
     return
 
@@ -79,35 +92,35 @@ def questionProcessing(question):
 
     if "who" in filtered_words  or "Who" in filtered_words:
         words = [word for word in filtered_words if "who" not in word and "Who" not in word] # Maybe reformat the rest like this if this syntax works
-        return("Who", filtered_words)
+        return("Who")
         # whoquestion(question)
     elif "how" in filtered_words  or "How" in filtered_words:
         words = [word for word in filtered_words if word != "how" and word != "How"]
-        return("how", filtered_words)
+        return("How")
     elif "where" in filtered_words  or "Where" in filtered_words:
         words = [word for word in filtered_words if word != "where" and word != "Where"]
-        return("where", filtered_words)
+        return("Where")
     elif "when" in filtered_words  or "When" in filtered_words:
         words = [word for word in filtered_words if word != "when" and word != "When"]
-        return("when", filtered_words)
+        return("When")
     elif "what" in filtered_words  or "What" in filtered_words:
         words = [word for word in filtered_words if word != "what" and word != "What"]
-        return("what", filtered_words)
+        return("What")
     else:
-        return('else', filtered_words)
+        return('Else')
         #Try all cases and return highest confidence
 
 
     return;
 
-def whoquestion(question):
+def whoquestion(question, number, traintest):
     #have a who question. --- LOOKING FOR A PERSON
-
     #take out stopwords from question
     stop_words = set(stopwords.words('english'))
     keywords = list(set(question) - stopwords - set('who', "Who"))
-
     #read associated document-- get 10grams
+    documentpath = "hw5_data/topdocs/" + traintest + "/topdocs." + str(number)
+    tengrams = readDocuments(documentpath)
     #preproccess 10-grams for question
 
     """Two types of who questions"""
