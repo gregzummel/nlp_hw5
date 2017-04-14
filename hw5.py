@@ -43,19 +43,19 @@ def questionProcessing(question):
     stemmer = PorterStemmer()
 
     if filtered_words.contains("who") or filtered_words.contains("Who"):
-        words = [word for word in filtered_words if word != "who" && word != "Who"]
+        words = [word for word in filtered_words if "who" not in word and "Who" not in word] # Maybe reformat the rest like this if this syntax works
         # whoquestion(question)
     elif filtered_words.contains("how") or filtered_words.contains("how"):
-        words = [word for word in filtered_words if word != "how" && word != "How"]
+        words = [word for word in filtered_words if word != "how" and word != "How"]
 
     elif filtered_words.contains("where") or filtered_words.contains("Where"):
-        words = [word for word in filtered_words if word != "where" && word != "Where"]
+        words = [word for word in filtered_words if word != "where" and word != "Where"]
 
     elif filtered_words.contains("when") or filtered_words.contains("When"):
-        words = [word for word in filtered_words if word != "when" && word != "When"]
+        words = [word for word in filtered_words if word != "when" and word != "When"]
 
     elif filtered_words.contains("what") or filtered_words.contains("What"):
-        words = [word for word in filtered_words if word != "what" && word != "What"]
+        words = [word for word in filtered_words if word != "what" and word != "What"]
 
     else:
         #Try all cases and return highest confidence
