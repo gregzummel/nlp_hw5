@@ -20,7 +20,8 @@ def readDocuments(document_path):
 
     from nltk import ngrams
     n = 10
-    tengrams = ngrams(text.split(), n)
+    tengrams = ngrams(nltk.word_tokenize(text), n)
+    #returns a generator of tuples
     return tengrams
 
 def compareVectors(a, b):
@@ -121,7 +122,12 @@ def whoquestion(question, number, traintest):
     #read associated document-- get 10grams
     documentpath = "hw5_data/topdocs/" + traintest + "/topdocs." + str(number)
     tengrams = readDocuments(documentpath)
-    #preproccess 10-grams for question
+    for gram in tengrams:
+        #for each ngram, compute a similarity.
+        
+        #give pos tags
+
+
 
     """Two types of who questions"""
     #how to distiguish between them.
