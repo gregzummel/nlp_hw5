@@ -1,4 +1,5 @@
 import nltk
+from nltk.corpus import stopwords
 def readDocuments(document_path):
     #documentpath =
     import codecs
@@ -51,8 +52,9 @@ def main(traintest):
     for number in questions.keys():
         question = questions[number]
         guess = questionProcessing(question)
-        print(question)
-        print(guess)
+        if guess[0] == "Who":
+            print(guess)
+            print(question)
 
     return
 
@@ -69,7 +71,7 @@ def questionProcessing(question):
     q_words= nltk.word_tokenize(question)
     filtered_words = q_words
     #[word for word in q_words if word not in stop_words]
-    
+
     # filt_q = " ".join(filtered_words)
     # quest = filt_q.lower()
 
@@ -99,9 +101,23 @@ def questionProcessing(question):
     return;
 
 def whoquestion(question):
-    #have a who question.
+    #have a who question. --- LOOKING FOR A PERSON
+
+    #take out stopwords from question
+    stop_words = set(stopwords.words('english'))
+
     #read associated document-- get 10grams
     #preproccess 10-grams for question
+
+    """Two types of who questions"""
+    #how to distiguish between them.
+    """Who is ...."""
+    sent = "who is XXX's friend and biographer."
+
+
+
+    """Who did ..."""
+
 
     #take passage 10-grams, and find the one with the best match.
 
