@@ -31,6 +31,35 @@ def findTopPassages(passages, question):
 def questionProcessing(question):
     #determine what kind of question it is:
     #remove stopwords
+    from nltk.corpus import stopwords
+    stop_words = set(stopwords.words('english'))
+    q_words= question.split()
+    filtered_words = [word for word in q_words if word not in stop_words]
+    # filt_q = " ".join(filtered_words)
+    # quest = filt_q.lower()
+    
+    #stemming
+    from nltk.stem.porter import *
+    stemmer = PorterStemmer()
+
+    if filtered_words.contains("who") or filtered_words.contains("Who"):
+        words = [word for word in filtered_words if word != "who" && word != "Who"]
+        # whoquestion(question)
+    elif filtered_words.contains("how") or filtered_words.contains("how"):
+        words = [word for word in filtered_words if word != "how" && word != "How"]
+
+    elif filtered_words.contains("where") or filtered_words.contains("Where"):
+        words = [word for word in filtered_words if word != "where" && word != "Where"]
+
+    elif filtered_words.contains("when") or filtered_words.contains("When"):
+        words = [word for word in filtered_words if word != "when" && word != "When"]
+
+    elif filtered_words.contains("what") or filtered_words.contains("What"):
+        words = [word for word in filtered_words if word != "what" && word != "What"]
+
+    else:
+        #Try all cases and return highest confidence
+
 
         #who
             #look for person.
@@ -43,7 +72,7 @@ def questionProcessing(question):
             #look for location
         #how
         #which
-    return question
+    return;
 
 def whoquestion(question):
 
