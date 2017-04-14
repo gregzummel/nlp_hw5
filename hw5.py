@@ -53,19 +53,19 @@ def questionProcessing(question):
     stemmer = PorterStemmer()
 
     if filtered_words.contains("who") or filtered_words.contains("Who"):
-        words = [word for word in filtered_words if "who" not in word and "Who" not in word] # Maybe reformat the rest like this if this syntax works
+        words = [stemmer.stem(word) for word in filtered_words if "who" not in word and "Who" not in word] # Maybe reformat the rest like this if this syntax works
         # whoquestion(question)
     elif filtered_words.contains("how") or filtered_words.contains("how"):
-        words = [word for word in filtered_words if "how" not in word and "How" not in word]
+        words = [stemmer.stem(word) for word in filtered_words if "how" not in word and "How" not in word]
 
     elif filtered_words.contains("where") or filtered_words.contains("Where"):
-        words = [word for word in filtered_words if "where" not in word and "Where" not in word]
+        words = [stemmer.stem(word) for word in filtered_words if "where" not in word and "Where" not in word]
 
     elif filtered_words.contains("when") or filtered_words.contains("When"):
-        words = [word for word in filtered_words if "when" not in word and "When" not in word]
+        words = [stemmer.stem(word) for word in filtered_words if "when" not in word and "When" not in word]
 
     elif filtered_words.contains("what") or filtered_words.contains("What"):
-        words = [word for word in filtered_words if "what" not in word and "What" not in word]
+        words = [stemmer.stem(word) for word in filtered_words if "what" not in word and "What" not in word]
 
     else:
         #Try all cases and return highest confidence
@@ -73,12 +73,11 @@ def questionProcessing(question):
     return;
 
 def whoquestion(question):
-
     return
 def whatquestion(question):
     return
 def wherequestion(question):
-
+    
     return
 
 =======
