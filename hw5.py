@@ -7,6 +7,7 @@ def readDocuments(document_path):
     sentences = file.readlines()
 
     text = ""
+    intext = False
     for sentence in sentences:
         #get rid of the '\n'
         sentence = sentence[0:-1]
@@ -54,6 +55,8 @@ def main(traintest):
         question = questions[number]
         guess = questionProcessing(question)
         if guess == "Who":
+            print(str(number) + "main")
+            print()
             whoquestion(question, number, traintest)
         elif guess == "Where":
             continue
@@ -68,7 +71,7 @@ def main(traintest):
             continue
             #do what function
         else:
-            print(guess, question)
+            print("else")
 
     return
 
@@ -118,13 +121,18 @@ def whoquestion(question, number, traintest):
     #have a who question. --- LOOKING FOR A PERSON
     #take out stopwords from question
     stop_words = set(stopwords.words('english'))
-    keywords = list(set(question) - stopwords - set('who', "Who"))
+    keywords = list(set(question) - stop_words - set(['who', "Who"]))
     #read associated document-- get 10grams
-    documentpath = "hw5_data/topdocs/" + traintest + "/topdocs." + str(number)
+    documentpath = "hw5_data/topdocs/" + traintest + "/top_docs." + str(number)
+    print(number)
     tengrams = readDocuments(documentpath)
     for gram in tengrams:
         #for each ngram, compute a similarity.
-        
+        #compareVectors(list(gram), question)
+        print(gram)
+        #when do we want to do named entity recognition?
+        #
+
         #give pos tags
 
 
