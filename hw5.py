@@ -1,3 +1,4 @@
+import nltk
 def readDocuments(document_path):
     #documentpath =
     import codecs
@@ -26,7 +27,7 @@ def compareVectors(a, b):
     return
 
 def findTopPassages(passages, question):
-
+    #compareVectors for all vectors.
     return
 
 def readQuestions(traintest):
@@ -37,13 +38,22 @@ def readQuestions(traintest):
     questions = {}
     for i in range(0, len(sentences)):
         if sentences[i][0:7] == "Number:":
-            questions[sentences[i][7:]] == sentences[i+1]
+            #create a dictionary of questions, numbered.
+            #key is an int.
+            questions[int(sentences[i][8:-1])] = sentences[i+1][:-1]
 
     return questions
 
 
 
 def main(traintest):
+    questions = readQuestions(traintest)
+    for number in questions.keys():
+        question = questions[number]
+        guess = questionProcessing(question)
+        print(question)
+        print(guess)
+
     return
 
 
@@ -52,36 +62,37 @@ def main(traintest):
 def questionProcessing(question):
     #determine what kind of question it is:
     #remove stopwords
-
-    from nltk.corpus import stopwords
-    stop_words = set(stopwords.words('english'))
-    q_words= question.split()
-    filtered_words = [word for word in q_words if word not in stop_words]
+    """'what', 'which' etc are included in stopwords, we can either remove it from the stopwords or not do stopwords yet"""
+    #from nltk.corpus import stopwords
+    #stop_words = set(stopwords.words('english'))
+    import nltk
+    q_words= nltk.word_tokenize(question)
+    filtered_words = q_words
+    #[word for word in q_words if word not in stop_words]
+    
     # filt_q = " ".join(filtered_words)
     # quest = filt_q.lower()
 
-    #stemming
-    from nltk.stem.porter import *
-    stemmer = PorterStemmer()
+    #stemming?
 
-    if filtered_words.contains("who") or filtered_words.contains("Who"):
+    if "who" in filtered_words  or "Who" in filtered_words:
         words = [word for word in filtered_words if "who" not in word and "Who" not in word] # Maybe reformat the rest like this if this syntax works
-        return("Who")
+        return("Who", filtered_words)
         # whoquestion(question)
-    elif filtered_words.contains("how") or filtered_words.contains("how"):
+    elif "how" in filtered_words  or "How" in filtered_words:
         words = [word for word in filtered_words if word != "how" and word != "How"]
-        return("how")
-    elif filtered_words.contains("where") or filtered_words.contains("Where"):
+        return("how", filtered_words)
+    elif "where" in filtered_words  or "Where" in filtered_words:
         words = [word for word in filtered_words if word != "where" and word != "Where"]
-        return("where")
-    elif filtered_words.contains("when") or filtered_words.contains("When"):
+        return("where", filtered_words)
+    elif "when" in filtered_words  or "When" in filtered_words:
         words = [word for word in filtered_words if word != "when" and word != "When"]
-        return("when")
-    elif filtered_words.contains("what") or filtered_words.contains("What"):
+        return("when", filtered_words)
+    elif "what" in filtered_words  or "What" in filtered_words:
         words = [word for word in filtered_words if word != "what" and word != "What"]
-        return("what")
+        return("what", filtered_words)
     else:
-        return('else')
+        return('else', filtered_words)
         #Try all cases and return highest confidence
 
 
