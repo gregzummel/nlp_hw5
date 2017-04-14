@@ -8,7 +8,7 @@ def readDocuments(document_path):
     for sentence in sentences:
         #get rid of the '\n'
         sentence = sentence[0:-1]
-        if intext= True and sentence[0] != "<":
+        if intext== True and sentence[0] != "<":
             #remove newlines?
             text = text+ " " + sentence
         if sentence == "<TEXT>":
@@ -34,6 +34,18 @@ def readQuestions(traintest):
     documentpath = "hw5_data/qadata/" + traintest + "/questions.txt"
     file = codecs.open(documentpath, 'r', 'cp437')
     sentences = file.readlines()
+    questions = {}
+    for i in range(0, len(sentences)):
+        if sentences[i][0:7] == "Number:":
+            questions[sentences[i][7:]] == sentences[i+1]
+
+    return questions
+
+
+
+def main(traintest):
+    return
+
 
 
 
@@ -54,34 +66,43 @@ def questionProcessing(question):
 
     if filtered_words.contains("who") or filtered_words.contains("Who"):
         words = [word for word in filtered_words if "who" not in word and "Who" not in word] # Maybe reformat the rest like this if this syntax works
+        return("Who")
         # whoquestion(question)
     elif filtered_words.contains("how") or filtered_words.contains("how"):
         words = [word for word in filtered_words if word != "how" and word != "How"]
-
+        return("how")
     elif filtered_words.contains("where") or filtered_words.contains("Where"):
         words = [word for word in filtered_words if word != "where" and word != "Where"]
-
+        return("where")
     elif filtered_words.contains("when") or filtered_words.contains("When"):
         words = [word for word in filtered_words if word != "when" and word != "When"]
-
+        return("when")
     elif filtered_words.contains("what") or filtered_words.contains("What"):
         words = [word for word in filtered_words if word != "what" and word != "What"]
-
+        return("what")
     else:
+        return('else')
         #Try all cases and return highest confidence
+
 
     return;
 
 def whoquestion(question):
-    #my branch
+    #have a who question.
+    #read associated document-- get 10grams
+    #preproccess 10-grams for question
+
+    #take passage 10-grams, and find the one with the best match.
+
+
     return
 def whatquestion(question):
     return
 def wherequestion(question):
+    #
 
     return
 
-=======
         #how-contains how?
         #which-contains which
     return question
