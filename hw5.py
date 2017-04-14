@@ -1,10 +1,12 @@
 def readDocuments(document_path):
+    #documentpath =
     import codecs
-    file = codecs.open(document_path, 'r', 'cp437'):
+    file = codecs.open(document_path, 'r', 'cp437')
     sentences = file.readlines()
 
     text = ""
     for sentence in sentences:
+        #get rid of the '\n'
         sentence = sentence[0:-1]
         if intext= True and sentence[0] != "<":
             #remove newlines?
@@ -24,20 +26,28 @@ def compareVectors(a, b):
     return
 
 def findTopPassages(passages, question):
-    
+
     return
+
+def readQuestions(traintest):
+    import codecs
+    documentpath = "hw5_data/qadata/" + traintest + "/questions.txt"
+    file = codecs.open(documentpath, 'r', 'cp437')
+    sentences = file.readlines()
+
 
 
 def questionProcessing(question):
     #determine what kind of question it is:
     #remove stopwords
+
     from nltk.corpus import stopwords
     stop_words = set(stopwords.words('english'))
     q_words= question.split()
     filtered_words = [word for word in q_words if word not in stop_words]
     # filt_q = " ".join(filtered_words)
     # quest = filt_q.lower()
-    
+
     #stemming
     from nltk.stem.porter import *
     stemmer = PorterStemmer()
@@ -60,18 +70,6 @@ def questionProcessing(question):
     else:
         #Try all cases and return highest confidence
 
-
-        #who
-            #look for person.
-
-        #what
-            #more difficult. Noun Phrase
-        #when
-            #look for time
-        #where
-            #look for location
-        #how
-        #which
     return;
 
 def whoquestion(question):
@@ -80,4 +78,10 @@ def whoquestion(question):
 def whatquestion(question):
     return
 def wherequestion(question):
+
     return
+
+=======
+        #how-contains how?
+        #which-contains which
+    return question
