@@ -11,13 +11,17 @@ def readDocuments(document_path):
     for sentence in sentences:
         #get rid of the '\n'
         sentence = sentence[0:-1]
-        if intext== True and sentence[0] != "<":
+
+        if intext== True and len(sentence) > 0 and sentence[0] != "<":
             #remove newlines?
             text = text+ " " + sentence
+
         if sentence == "<TEXT>":
-            intext == True
+            intext = True
+
         if sentence == "</TEXT>":
-            intext == False
+            intext = False
+
 
     from nltk import ngrams
     n = 10
@@ -129,7 +133,7 @@ def whoquestion(question, number, traintest):
     for gram in tengrams:
         #for each ngram, compute a similarity.
         #compareVectors(list(gram), question)
-        print(gram)
+
         #when do we want to do named entity recognition?
         #
 
@@ -152,9 +156,9 @@ def whoquestion(question, number, traintest):
 
     return
 def whatquestion(question):
+
     return
 def wherequestion(question):
-    #
 
     return
 
