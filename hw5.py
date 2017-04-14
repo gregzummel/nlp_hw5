@@ -105,6 +105,7 @@ def whoquestion(question):
 
     #take out stopwords from question
     stop_words = set(stopwords.words('english'))
+    keywords = list(set(question) - stopwords - set('who', "Who"))
 
     #read associated document-- get 10grams
     #preproccess 10-grams for question
