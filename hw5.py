@@ -30,8 +30,26 @@ def readDocuments(document_path):
     return tengrams
 
 def compareVectors(a, b):
+    #convert the wordvector to number vectors
 
-    return
+
+    sim_score = cosineSim(x,y)
+    return sim_score
+
+def cosineSim(x,y):
+    import math
+    #prereq: |x| = |y|
+    numerator = 0
+    x_square = 0
+    y_square = 0
+    for i in range(0, len(x)):
+        numerator += x[i] * y[i]
+        x_square += x[i]**2
+        y_square += y[i]**2
+    denominator =  math.sqrt(x_square) * math.sqrt(y_square)
+
+    return numerator / denominator
+
 
 def findTopPassages(passages, question):
     #compareVectors for all vectors.
@@ -78,8 +96,6 @@ def main(traintest):
             print("else")
 
     return
-
-
 
 
 def questionProcessing(question):
