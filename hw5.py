@@ -187,6 +187,10 @@ def whoquestion(question, number, traintest):
     #take passage 10-grams, and find the one with the best match.
     return
 def whatquestion(question):
+    """
+    http://www.nltk.org/book/ch05.html
+    http://www.nltk.org/book/ch07.html
+    """
 
     return
 def wherequestion(question):
