@@ -164,6 +164,12 @@ def whoquestion(question, number, traintest):
     for gram in tengrams:
         words = set(gram) - stop_words
         value = compareVectors(words,keywords)
+
+        """"Should we let the words be the keys and the value of the match be the values?
+        all we need to do is make sure that when we look at them to find matches, pick
+        the highest values first. """
+
+
         if value in ranked_passages.keys():
             ranked_passages[value] = [ranked_passages[value], words]
         else:
@@ -173,22 +179,12 @@ def whoquestion(question, number, traintest):
     #
 
     #give pos tags
-
-
-
     """Two types of who questions"""
     #how to distiguish between them.
     """Who is ...."""
     sent = "who is XXX's friend and biographer."
-
-
-
     """Who did ..."""
-
-
     #take passage 10-grams, and find the one with the best match.
-
-
     return
 def whatquestion(question):
 
