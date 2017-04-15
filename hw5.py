@@ -31,7 +31,22 @@ def readDocuments(document_path):
 
 def compareVectors(a, b):
     #convert the wordvector to number vectors
+    #how do we want to create these vectors? bag of words/unigrams or colocations?
+    #unigrams created.
+    x = []
+    y = []
+    for element in a:
+        x.append(1)
+        if element in b:
+            y.append(1)
+        else:
+            y.append(0)
 
+    for element in b:
+        if element not in a:
+            y.append(1)
+            x.append(0)
+    
 
     sim_score = cosineSim(x,y)
     return sim_score
