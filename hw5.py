@@ -30,7 +30,7 @@ def readDocuments(document_path):
     return tengrams
 
 def compareVectors(a, b):
-    #convert the wordvector to number vectors
+    #convert the wordvector (without stopwords) to number vectors
     #how do we want to create these vectors? bag of words/unigrams or colocations?
     #unigrams created.
     x = []
@@ -46,7 +46,6 @@ def compareVectors(a, b):
         if element not in a:
             y.append(1)
             x.append(0)
-    
 
     sim_score = cosineSim(x,y)
     return sim_score
@@ -161,14 +160,19 @@ def whoquestion(question, number, traintest):
     documentpath = "hw5_data/topdocs/" + traintest + "/top_docs." + str(number)
     print(number)
     tengrams = readDocuments(documentpath)
+    ranked_passages = {}
     for gram in tengrams:
-        #for each ngram, compute a similarity.
-        #compareVectors(list(gram), question)
+        words = set(gram) - stop_words
+        value = compareVectors(words,keywords)
+        if value in ranked_passages.keys():
+            ranked_passages[value] = [ranked_passages[value], words]
+        else:
+            ranked_passages[value] = words
 
-        #when do we want to do named entity recognition?
-        #
+    #Using top x passage, indentify named entities.
+    #
 
-        #give pos tags
+    #give pos tags
 
 
 
