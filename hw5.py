@@ -1,4 +1,4 @@
-import nltk
+import nltk, collections
 from nltk.corpus import stopwords
 def readDocuments(document_path):
     #documentpath =
@@ -64,10 +64,14 @@ def cosineSim(x,y):
 
     return numerator / denominator
 
-
 def findTopPassages(passages, question):
     #compareVectors for all vectors.
     return
+
+def sortDictionary(dictionary):
+    return collections.OrderedDict(sorted(dictionary.items()))
+
+
 
 def readQuestions(traintest):
     import codecs
@@ -154,6 +158,7 @@ def questionProcessing(question):
 def whoquestion(question, number, traintest):
     #have a who question. --- LOOKING FOR A PERSON
     #take out stopwords from question
+    question = nltk.word_tokenize(question)
     stop_words = set(stopwords.words('english'))
     keywords = list(set(question) - stop_words - set(['who', "Who"]))
     #read associated document-- get 10grams
@@ -169,11 +174,27 @@ def whoquestion(question, number, traintest):
         all we need to do is make sure that when we look at them to find matches, pick
         the highest values first. """
 
+        if value != 0:
+            if value in ranked_passages.keys():
+                ranked_passages[value].append(words)
+            else:
+                ranked_passages[value] = []
+                ranked_passages[value].append(words)
 
-        if value in ranked_passages.keys():
-            ranked_passages[value] = [ranked_passages[value], words]
-        else:
-            ranked_passages[value] = words
+    sorted_passages = sortDictionary(ranked_passages)
+    counter = 0
+    for value in reversed(sorted_passages.keys()):
+        print(value)
+        if counter > 100:
+            break
+
+        for word_list in sorted_passages[value]:
+            reduced_list = list(set(word_list) - set(keywords))
+            pos_red_list = nltk.pos_tag(reduced_list)
+            tree = (nltk.ne_chunk(pos_red_list, binary=True))
+            counter+=1
+
+
 
     #Using top x passage, indentify named entities.
     #
@@ -186,6 +207,8 @@ def whoquestion(question, number, traintest):
     """Who did ..."""
     #take passage 10-grams, and find the one with the best match.
     return
+
+
 def whatquestion(question):
     """
     http://www.nltk.org/book/ch05.html
