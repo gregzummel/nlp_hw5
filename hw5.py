@@ -22,10 +22,61 @@ def readDocuments(document_path):
     return tengrams
 
 def compareVectors(a, b):
+    #convert the wordvector (without stopwords) to number vectors
+    #how do we want to create these vectors? bag of words/unigrams or colocations?
+    #unigrams created.
+    x = []
+    y = []
+    for element in a:
+        x.append(1)
+        if element in b:
+            y.append(1)
+        else:
+            y.append(0)
 
-    return
+    for element in b:
+        if element not in a:
+            y.append(1)
+            x.append(0)
+
+    sim_score = cosineSim(x,y)
+    return sim_score
+
+def cosineSim(x,y):
+    import math
+    #prereq: |x| = |y|
+    numerator = 0
+    x_square = 0
+    y_square = 0
+    for i in range(0, len(x)):
+        numerator += x[i] * y[i]
+        x_square += x[i]**2
+        y_square += y[i]**2
+    denominator =  math.sqrt(x_square) * math.sqrt(y_square)
+
+    return numerator / denominator
+
 
 def findTopPassages(passages, question):
+    scores = [] #Should find a better way to store and retrieve top 10. Maybe priority queue\
+?
+    for p in passages:
+        p_vect = []
+        q_vect = []
+        for word in question:
+            if p.contains(word):
+                p_vect.add(1)
+            else:
+                p_vect.add(0)
+            q_vect.add(1)
+        left = len(p)-len(q_vect)
+        for i in range(0, left):
+            p_vect.add(1)
+            q_vect.add(0)
+        sim = compareVectors(q_vect, p_vect)
+        scores.add(sim)
+
+    return scores
 
     return
 
