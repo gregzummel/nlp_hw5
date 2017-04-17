@@ -64,9 +64,30 @@ def cosineSim(x,y):
 
     return numerator / denominator
 
-def findTopPassages(passages, question):
-    #compareVectors for all vectors.
-    return
+def TopPassages(tengrams, question):
+    question_tagged = nltk.pos_tag(question)
+    stop_words = set(stopwords.words('english'))
+    keywords = list(set(question) - stop_words - set(['who', "Who", "?"]))
+    for gram in tengrams:
+        words = set(gram) - stop_words
+        #use fuzzy matching?
+        value = compareVectors(words,keywords)
+
+        """"Should we let the words be the keys and the value of the match be the values?
+        all we need to do is make sure that when we look at them to find matches, pick
+        the highest values first. """
+
+        if value != 0:
+            if value in ranked_passages.keys():
+                ##add gram instead?
+                ranked_passages[value].append(gram)
+            else:
+                #add gram instead?
+                ranked_passages[value] = []
+                ranked_passages[value].append(gram)
+
+    sorted_passages = sortDictionary(ranked_passages)
+    return sorted_passages
 
 def sortDictionary(dictionary):
     return collections.OrderedDict(sorted(dictionary.items()))
@@ -166,9 +187,11 @@ def whoquestion(question, number, traintest):
     documentpath = "hw5_data/topdocs/" + traintest + "/top_docs." + str(number)
     print(number)
     tengrams = readDocuments(documentpath)
+    sorted_passages = TopPassages(tengrams, question)
     ranked_passages = {}
     for gram in tengrams:
         words = set(gram) - stop_words
+        #use fuzzy matching?
         value = compareVectors(words,keywords)
 
         """"Should we let the words be the keys and the value of the match be the values?
@@ -184,7 +207,7 @@ def whoquestion(question, number, traintest):
                 ranked_passages[value] = []
                 ranked_passages[value].append(gram)
 
-    sorted_passages = sortDictionary(ranked_passages)
+
     counter = 0
     ne_list = []
     for value in reversed(sorted_passages.keys()):
