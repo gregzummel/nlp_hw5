@@ -159,8 +159,9 @@ def whoquestion(question, number, traintest):
     #have a who question. --- LOOKING FOR A PERSON
     #take out stopwords from question
     question = nltk.word_tokenize(question)
+    question_tagged = nltk.pos_tag(question)
     stop_words = set(stopwords.words('english'))
-    keywords = list(set(question) - stop_words - set(['who', "Who"]))
+    keywords = list(set(question) - stop_words - set(['who', "Who", "?"]))
     #read associated document-- get 10grams
     documentpath = "hw5_data/topdocs/" + traintest + "/top_docs." + str(number)
     print(number)
@@ -176,22 +177,41 @@ def whoquestion(question, number, traintest):
 
         if value != 0:
             if value in ranked_passages.keys():
-                ranked_passages[value].append(words)
+                ##add gram instead?
+                ranked_passages[value].append(gram)
             else:
+                #add gram instead?
                 ranked_passages[value] = []
-                ranked_passages[value].append(words)
+                ranked_passages[value].append(gram)
 
     sorted_passages = sortDictionary(ranked_passages)
     counter = 0
+    ne_list = []
     for value in reversed(sorted_passages.keys()):
         print(value)
-        if counter > 100:
+        if counter > 25:
             break
 
         for word_list in sorted_passages[value]:
-            reduced_list = list(set(word_list) - set(keywords))
-            pos_red_list = nltk.pos_tag(reduced_list)
-            tree = (nltk.ne_chunk(pos_red_list, binary=True))
+            pos_list = nltk.pos_tag(word_list)
+            tree = (nltk.ne_chunk(pos_list, binary=True))
+            for element in tree:
+                try:
+                    ne = element.label()
+                    if ne == "NE":
+                        leaves = element.leaves()
+                        for leaf in leaves:
+                            if leaf[0] not in question:
+                                ne_list.append(leaf)
+
+                except AttributeError:
+                    continue
+            print(word_list)
+            print(pos_list)
+            print(tree)
+            print(ne_list)
+            print(counter)
+
             counter+=1
 
 
