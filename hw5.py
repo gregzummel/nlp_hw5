@@ -68,11 +68,15 @@ def TopPassages(tengrams, question):
     question_tagged = nltk.pos_tag(question)
     stop_words = set(stopwords.words('english'))
     keywords = list(set(question) - stop_words - set(['who', "Who", "?"]))
+
+    ranked_passages = {}
     for gram in tengrams:
         words = set(gram) - stop_words
         #use fuzzy matching?
-        value = compareVectors(words,keywords)
-
+        #value = compareVectors(words,keywords)
+        from fuzzywuzzy import fuzz
+        #value = compareVectors(words,keywords)
+        value = fuzz.ratio(gram, question)
         """"Should we let the words be the keys and the value of the match be the values?
         all we need to do is make sure that when we look at them to find matches, pick
         the highest values first. """
@@ -131,6 +135,12 @@ def main(traintest):
         elif guess == "What":
             continue
             #do what function
+        elif guess == "What is":
+            continue
+        elif guess == "Can":
+            continue
+        elif guess == "Who is":
+            continue
         else:
             print("else")
 
@@ -188,24 +198,25 @@ def whoquestion(question, number, traintest):
     print(number)
     tengrams = readDocuments(documentpath)
     sorted_passages = TopPassages(tengrams, question)
-    ranked_passages = {}
-    for gram in tengrams:
-        words = set(gram) - stop_words
-        #use fuzzy matching?
-        value = compareVectors(words,keywords)
-
-        """"Should we let the words be the keys and the value of the match be the values?
-        all we need to do is make sure that when we look at them to find matches, pick
-        the highest values first. """
-
-        if value != 0:
-            if value in ranked_passages.keys():
-                ##add gram instead?
-                ranked_passages[value].append(gram)
-            else:
-                #add gram instead?
-                ranked_passages[value] = []
-                ranked_passages[value].append(gram)
+    # ranked_passages = {}
+    # for gram in tengrams:
+    #     words = set(gram) - stop_words
+    #     #use fuzzy matching?
+    #     from fuzzywuzzy import fuzz
+    #     #value = compareVectors(words,keywords)
+    #     value = fuzz.ratio(gram, keywords)
+    #     """"Should we let the words be the keys and the value of the match be the values?
+    #     all we need to do is make sure that when we look at them to find matches, pick
+    #     the highest values first. """
+    #
+    #     if value != 0:
+    #         if value in ranked_passages.keys():
+    #             ##add gram instead?
+    #             ranked_passages[value].append(gram)
+    #         else:
+    #             #add gram instead?
+    #             ranked_passages[value] = []
+    #             ranked_passages[value].append(gram)
 
 
     counter = 0
@@ -229,13 +240,14 @@ def whoquestion(question, number, traintest):
 
                 except AttributeError:
                     continue
-            print(word_list)
-            print(pos_list)
-            print(tree)
-            print(ne_list)
-            print(counter)
 
-            counter+=1
+                counter+=1
+
+    print(word_list)
+    print(pos_list)
+    print(tree)
+    print(ne_list)
+    print(counter)
 
 
 
@@ -259,10 +271,98 @@ def whatquestion(question):
     """
 
     return
+
+def whatis(question, tengrams):
+    #question is an unprocessed string.
+    quesiton_tokens = nltk.word_tokenize(question)
+    question_tags = nltk.pos_tag(question_tokens)
+    #a X is...#
+    #
+
 def wherequestion(question):
 
     return
 
         #how-contains how?
         #which-contains which
-    return question
+def synonyms(word):
+    from PyDictionary import PyDictionary
+    dictionary = PyDictionary()
+    synonyms = dictionary.synonym('blue', "lxml")
+    return synonyms
+
+
+def readWhoosh(documentpath, number, question):
+    traintest = 'train'
+    document_path = "hw5_data/topdocs/" + traintest + "/top_docs." + str(number)
+
+    from whoosh.index import create_in
+    from whoosh.fields import Schema, STORED, NUMERIC, TEXT
+    schema = Schema(title=STORED, rank=STORED, content=TEXT(stored = True))
+    import os.path
+    if not os.path.exists("index"):
+        os.mkdir("index")
+    ix = create_in("index", schema)
+
+    from whoosh.index import open_dir
+    ix = open_dir("index")
+
+    writer = ix.writer()
+
+    import codecs
+    file = codecs.open(document_path, 'r', 'cp437')
+    sentences = file.readlines()
+
+    text = ""
+    intext = False
+    for i in range(0, len(sentences)):
+        #get rid of the '\n'
+        sentence = sentences[i]
+        sentence = sentence[0:-1]
+
+        if intext== True and len(sentence) > 0 and sentence[0] != "<":
+
+            text = text+ " " + sentence
+
+        elif sentence[0:4] == "Qid:":
+            scoreix = sentence.index("Score:") + 7
+            score = sentence[int(scoreix):]
+
+
+        elif sentence[0:7] == "<DOCNO>":
+            try:
+                #get index from the next
+                end = sentence.index("</") - 1
+                idnumber = sentence[8:end]
+            except ValueError:
+                idnumber = sentences[i+1][:-1]
+                #get the value from the next line.
+
+        elif sentence == "<TEXT>":
+            intext = True
+
+        elif sentence == "</TEXT>":
+            intext = False
+
+            #write to the document.
+            writer.add_document(title=idnumber, rank=score, content=text)
+
+
+            text = ""
+
+    writer.commit()
+    ix=open_dir("index")
+    from whoosh.qparser import QueryParser
+    from whoosh import qparser, scoring
+    #query = QueryParser("content", ix.schema, group=qparser.OrGroup).parse('question ~ 5')
+    qp = QueryParser('content', ix.schema, group=qparser.OrGroup)
+    q = qp.parse('wrote the "Grinch who Stole Christmas"')
+    with ix.searcher() as searcher:
+        results = searcher.search(q)
+        for result in results:
+            print(result["title"])
+
+
+    # results = searcher.search(query)
+    # for result in results:
+    #     print(result['title'])
