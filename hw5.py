@@ -350,6 +350,9 @@ def readWhoosh(documentpath, number, question):
             intext = False
 
             #write to the document.
+            print(idnumber)
+            print(score)
+            print(text)
             writer.add_document(title=idnumber, rank=score, content=text)
 
 
@@ -361,12 +364,30 @@ def readWhoosh(documentpath, number, question):
     from whoosh import qparser, scoring
     #query = QueryParser("content", ix.schema, group=qparser.OrGroup).parse('question ~ 5')
     qp = QueryParser('content', ix.schema, group=qparser.OrGroup)
-    q = qp.parse('wrote the "Grinch who Stole Christmas"')
+    qp2 = QueryParser('content', ix.schema)
+    q = qp.parse('the NFL was established')
+    q2 = qp.parse('the NFL was established')
+    print("SEARCHING")
     with ix.searcher() as searcher:
+        from whoosh import highlight
         results = searcher.search(q)
-        for result in results:
-            print(result["title"])
 
+        results.formatter = highlight.UppercaseFormatter()
+        results.fragmenter = highlight.SentenceFragmenter()
+
+        results2 = searcher.search(q2)
+        results2.formatter = highlight.UppercaseFormatter()
+        results2.fragmenter = highlight.SentenceFragmenter()
+
+        for result in results:
+
+            print(result["title"])
+            print(result.highlights("content"))
+        for result in results2:
+            print(result['title'])
+            print(result.highlights("content"))
+
+        print(len(results), len(results2))
 
     # results = searcher.search(query)
     # for result in results:
