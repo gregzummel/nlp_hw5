@@ -157,7 +157,8 @@ def main(traintest):
             continue
             #do what function
         elif guess == "What is":
-            continue
+            print(str(number) + "what is")
+            whatisquestion(question)
         elif guess == "Can":
             continue
         elif guess == "Who is":
@@ -183,8 +184,10 @@ def questionProcessing(question):
     # quest = filt_q.lower()
 
     #stemming?
-
-    if "who" in filtered_words  or "Who" in filtered_words:
+    if "what is" in filtered_words  or "What is" in filtered_words:
+        words = [word for word in filtered_words if "what is" not in word and "What is" not in word] # Maybe reformat the rest like this if this syntax works
+        return("What is")
+    elif "who" in filtered_words  or "Who" in filtered_words:
         words = [word for word in filtered_words if "who" not in word and "Who" not in word] # Maybe reformat the rest like this if this syntax works
         return("Who")
         # whoquestion(question)
@@ -250,32 +253,32 @@ def whoquestion(question, number, traintest):
     print(ne_list)
     print(counter)
 
-
-
-    #Using top x passage, indentify named entities.
-    #
-
-    #give pos tags
-    """Two types of who questions"""
-    #how to distiguish between them.
-    """Who is ...."""
-    sent = "who is XXX's friend and biographer."
-    """Who did ..."""
-    #take passage 10-grams, and find the one with the best match.
     return
 
+def whatisquestion(question):
+    #looking for descriptors
+    #also who is
+    question = nltk.word_tokenize(question)
+    question_tagged = nltk.pos_tag(question)
+    stop_words = set(stopwords.words('english'))
+    keywords = list(set(question) - stop_words - set(['what', "What", "?"]))
+    for word in keywords:
+        syns = synonyms(word)
 
-def whatquestion(question):
-
+    #read associated document-- get 10grams
+    documentpath = "hw5_data/topdocs/" + traintest + "/top_docs." + str(number)
+    print(number)
+    tengrams = readDocuments(documentpath)
+    sorted_passages = TopPassages(tengrams, question)
     
 
-    return answer
 
-def whatis(question, tengrams):
-    #question is an unprocessed string.
-    quesiton_tokens = nltk.word_tokenize(question)
-    question_tags = nltk.pos_tag(question_tokens)
-    #a X is...#
+    return
+
+def whatquestion(question):
+    #looking for noun
+
+    return answer
     #
 
 def wherequestion(question):
