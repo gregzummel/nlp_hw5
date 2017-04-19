@@ -143,7 +143,7 @@ def main(traintest):
         if guess == "Who":
             print(str(number) + "main")
             print()
-            whoquestion(question, number, traintest)
+            #whoquestion(question, number, traintest)
         elif guess == "Where":
             continue
             #do where
@@ -262,18 +262,21 @@ def whatisquestion(question):
     question_tagged = nltk.pos_tag(question)
     stop_words = set(stopwords.words('english'))
     keywords = list(set(question) - stop_words - set(['what', "What", "?"]))
+    syns = []
     for word in keywords:
-        syns = synonyms(word)
+        syns.append(synonyms(word))
+
 
     #read associated document-- get 10grams
     documentpath = "hw5_data/topdocs/" + traintest + "/top_docs." + str(number)
     print(number)
     tengrams = readDocuments(documentpath)
     sorted_passages = TopPassages(tengrams, question)
-    
-
-
-    return
+    counter = 0
+    for entry in sorted_passages.keys():
+        print(sorted_passages[entry])
+    ##pattern matching.
+    return answer
 
 def whatquestion(question):
     #looking for noun
@@ -291,7 +294,7 @@ def synonyms(word):
     from PyDictionary import PyDictionary
     dictionary = PyDictionary()
     synonyms = dictionary.synonym(word, "lxml")
-    return synonyms
+    return synonyms[word]
 
 
 def readWhoosh(documentpath, number, question):
