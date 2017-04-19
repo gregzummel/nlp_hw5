@@ -64,10 +64,31 @@ def cosineSim(x,y):
 
     return numerator / denominator
 
+def inQuotes(question):
+    words_in_quotes = []
+    grab = False
+    for word in question:
+        if word == '``':
+            grab = True
+            continue
+        elif grab:
+            if word == "''":
+                grab = False
+
+            else:
+                words_in_quotes.append(word)
+    return words_in_quotes
+
+
 def TopPassages(tengrams, question):
     question_tagged = nltk.pos_tag(question)
     stop_words = set(stopwords.words('english'))
+
+    inquotes = inQuotes(question)
+
     keywords = list(set(question) - stop_words - set(['who', "Who", "?"]))
+    for word in keywords:
+        print(synonyms(word))
 
     ranked_passages = {}
     for gram in tengrams:
@@ -198,26 +219,6 @@ def whoquestion(question, number, traintest):
     print(number)
     tengrams = readDocuments(documentpath)
     sorted_passages = TopPassages(tengrams, question)
-    # ranked_passages = {}
-    # for gram in tengrams:
-    #     words = set(gram) - stop_words
-    #     #use fuzzy matching?
-    #     from fuzzywuzzy import fuzz
-    #     #value = compareVectors(words,keywords)
-    #     value = fuzz.ratio(gram, keywords)
-    #     """"Should we let the words be the keys and the value of the match be the values?
-    #     all we need to do is make sure that when we look at them to find matches, pick
-    #     the highest values first. """
-    #
-    #     if value != 0:
-    #         if value in ranked_passages.keys():
-    #             ##add gram instead?
-    #             ranked_passages[value].append(gram)
-    #         else:
-    #             #add gram instead?
-    #             ranked_passages[value] = []
-    #             ranked_passages[value].append(gram)
-
 
     counter = 0
     ne_list = []
@@ -265,12 +266,10 @@ def whoquestion(question, number, traintest):
 
 
 def whatquestion(question):
-    """
-    http://www.nltk.org/book/ch05.html
-    http://www.nltk.org/book/ch07.html
-    """
 
-    return
+    
+
+    return answer
 
 def whatis(question, tengrams):
     #question is an unprocessed string.
@@ -288,7 +287,7 @@ def wherequestion(question):
 def synonyms(word):
     from PyDictionary import PyDictionary
     dictionary = PyDictionary()
-    synonyms = dictionary.synonym('blue', "lxml")
+    synonyms = dictionary.synonym(word, "lxml")
     return synonyms
 
 
