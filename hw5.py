@@ -207,55 +207,17 @@ def questionProcessing(question):
     return;
 
 def whoquestion(question, number, traintest):
-    #have a who question. --- LOOKING FOR A PERSON
-    #take out stopwords from question
-    # question = nltk.word_tokenize(question)
-    # question_tagged = nltk.pos_tag(question)
-    # stop_words = set(stopwords.words('english'))
-    # keywords = list(set(question) - stop_words - set(['who', "Who", "?"]))
-    # #read associated document-- get 10grams
-    # documentpath = "hw5_data/topdocs/" + traintest + "/top_docs." + str(number)
-    # print(number)
-    # tengrams = readDocuments(documentpath)
-    # sorted_passages = TopPassages(tengrams, question)
-    #
-    # counter = 0
-    # ne_list = []
-    # for value in reversed(sorted_passages.keys()):
-    #     print(value)
-    #     if counter > 25:
-    #         break
-    #
-    #     for word_list in sorted_passages[value]:
-    #         pos_list = nltk.pos_tag(word_list)
-    #         tree = (nltk.ne_chunk(pos_list, binary=True))
-    #         for element in tree:
-    #             try:
-    #                 ne = element.label()
-    #                 if ne == "NE":
-    #                     leaves = element.leaves()
-    #                     for leaf in leaves:
-    #                         if leaf[0] not in question:
-    #                             ne_list.append(leaf)
-    #
-    #             except AttributeError:
-    #                 continue
-    #
-    #             counter+=1
-    #
-    # print(word_list)
-    # print(pos_list)
-    # print(tree)
-    # print(ne_list)
-    # print(counter)
 
     #process question.
-    named_entity = "PERSON"
-    stop_words = set(stopwords.words('english')) + set(["Who", "who"])
+    ne = "PERSON"
+    neBinary = False
+    stop_words = set(stopwords.words('english'))
     ix = readWhoosh(traintest, number)
-
-
-
+    top_ne = (queryneWhoosh(question, ix, ne, neBinary))
+    import operator
+    sorted_x0 = sorted(top_ne[0].items(), key=operator.itemgetter(1))
+    sorted_x1 = sorted(top_ne[1].items(), key=operator.itemgetter(1))
+    guesses = sorted_x0[-10:]
     return guesses
 
 def whatisquestion(question):
@@ -347,9 +309,6 @@ def readWhoosh(traintest, number):
             intext = False
 
             #write to the document.
-            print(idnumber)
-            print(score)
-            print(text)
             writer.add_document(title=idnumber, rank=score, content=text)
             text = ""
 
@@ -362,7 +321,20 @@ def joining(traintest, number, query, ne, neBinary):
     z = queryunigramWhoosh(query, ix)
     y = (querybigramWhoosh(query, ix))
     x = (queryneWhoosh(query, ix, ne, neBinary))
-    return z, y, x
+    import operator
+
+    sorted_x0 = sorted(x[0].items(), key=operator.itemgetter(1))
+    sorted_x1 = sorted(x[1].items(), key=operator.itemgetter(1))
+    sorted_y0 = sorted(y[0].items(), key=operator.itemgetter(1))
+    sorted_y1 = sorted(y[1].items(), key=operator.itemgetter(1))
+    sorted_z0 = sorted(z[0].items(), key=operator.itemgetter(1))
+    sorted_z1 = sorted(z[1].items(), key=operator.itemgetter(1))
+
+    sorted_kinda = [word for word in sorted_z0 if word not in nltk.word_tokenize(query)]
+    sorted_best = [word for word in sorted_kinda if "NN" in word[0][1]]
+
+
+    return sorted_x0,sorted_x1,sorted_y0,sorted_y1,sorted_z0,sorted_z1, sorted_best
 
 def queryunigramWhoosh(query, open_dir):
     ix = open_dir
@@ -386,23 +358,22 @@ def queryunigramWhoosh(query, open_dir):
         enum_tokens = {}
         stop_words = set(stopwords.words('english'))
         stop_words.update(['.', ',', '``', '"', "'", '?', '!', ':', ';', '(', ')', '[', ']', '{', '}', '...', '``', "''"])
+        stop_words.update([word.lower() for word in nltk.word_tokenize(query)])
         for result in results:
-            print(result['title'])
+
             tokens = nltk.word_tokenize(result.highlights("content"))
             tag_tokens = nltk.pos_tag(tokens)
             for token in tag_tokens:
-                if token in enum_tokens.keys() and token[0] not in stop_words:
+                if token in enum_tokens.keys() and token[0].lower() not in stop_words:
                     enum_tokens[token] += 1 * float(result['rank'])
                 else:
                     enum_tokens[token] = 1 * float(result['rank'])
         print(enum_tokens)
         enum_tokens2 = {}
         for result in results2:
-            print(result['title'])
-            print(result['title'])
             tokens = nltk.word_tokenize(result.highlights("content"))
             for token in tokens:
-                if token in enum_tokens2.keys() and token[0] not in stop_words:
+                if token in enum_tokens2.keys() and token[0].lower() not in stop_words:
                     enum_tokens2[token] += 1
                 else:
                     enum_tokens2[token] = 1
@@ -419,6 +390,7 @@ def querybigramWhoosh(query, open_dir):
     print("SEARCHING bigrams")
     stop_words = set(stopwords.words('english'))
     stop_words.update(['.', ',', '"', "'", '?', '!', ':', ';', '(', ')', '[', ']', '{', '}', '...', '``', "''"])
+    stop_words.update([word.lower() for word in nltk.word_tokenize(query)])
     with ix.searcher() as searcher:
         from whoosh import highlight
         results = searcher.search(q)
@@ -429,19 +401,15 @@ def querybigramWhoosh(query, open_dir):
         results2.fragmenter = highlight.SentenceFragmenter()
         enum_tokens = {}
         for result in results:
-            print(result['title'])
             unprocessedtokens = nltk.word_tokenize(result.highlights("content"))
-            tokens = [token for token in unprocessedtokens if token not in stop_words]
+            tokens = [token for token in unprocessedtokens if token.lower() not in stop_words]
             for bigram in nltk.ngrams(tokens, 2):
                 if bigram in enum_tokens.keys():
                     enum_tokens[bigram] += 1 * float(result['rank'])
                 else:
                     enum_tokens[bigram] = 1 * float(result['rank'])
-        print(enum_tokens)
         enum_tokens2 = {}
         for result in results2:
-            print(result['title'])
-            print(result['title'])
             unprocessedtokens = nltk.word_tokenize(result.highlights("content"))
             tokens = [token for token in unprocessedtokens if token not in stop_words]
             for token in tokens:
@@ -460,7 +428,7 @@ def queryneWhoosh(query, open_dir, ne, neBinary):
     q = qp.parse(query)
     q2 = qp2.parse(query)
     print("SEARCHING ne")
-
+    stop_words = set([word.lower() for word in nltk.word_tokenize(query)])
     with ix.searcher() as searcher:
         from whoosh import highlight
         results = searcher.search(q)
@@ -500,3 +468,47 @@ def queryneWhoosh(query, open_dir, ne, neBinary):
                 else:
                     enum_tokens2[netuple] = 1 * float(result['rank'])
         return enum_tokens, enum_tokens2
+
+
+
+    #have a who question. --- LOOKING FOR A PERSON
+    #take out stopwords from question
+    # question = nltk.word_tokenize(question)
+    # question_tagged = nltk.pos_tag(question)
+    # stop_words = set(stopwords.words('english'))
+    # keywords = list(set(question) - stop_words - set(['who', "Who", "?"]))
+    # #read associated document-- get 10grams
+    # documentpath = "hw5_data/topdocs/" + traintest + "/top_docs." + str(number)
+    # print(number)
+    # tengrams = readDocuments(documentpath)
+    # sorted_passages = TopPassages(tengrams, question)
+    #
+    # counter = 0
+    # ne_list = []
+    # for value in reversed(sorted_passages.keys()):
+    #     print(value)
+    #     if counter > 25:
+    #         break
+    #
+    #     for word_list in sorted_passages[value]:
+    #         pos_list = nltk.pos_tag(word_list)
+    #         tree = (nltk.ne_chunk(pos_list, binary=True))
+    #         for element in tree:
+    #             try:
+    #                 ne = element.label()
+    #                 if ne == "NE":
+    #                     leaves = element.leaves()
+    #                     for leaf in leaves:
+    #                         if leaf[0] not in question:
+    #                             ne_list.append(leaf)
+    #
+    #             except AttributeError:
+    #                 continue
+    #
+    #             counter+=1
+    #
+    # print(word_list)
+    # print(pos_list)
+    # print(tree)
+    # print(ne_list)
+    # print(counter)
