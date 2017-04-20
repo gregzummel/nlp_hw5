@@ -256,8 +256,6 @@ def whoquestion(question, number, traintest):
 
 
 
-    question =
-
     return guesses
 
 def whatisquestion(question):
@@ -363,7 +361,8 @@ def joining(traintest, number, query, ne, neBinary):
     ix = readWhoosh(traintest, number)
     z = queryunigramWhoosh(query, ix)
     y = (querybigramWhoosh(query, ix))
-    x = (queryneWhoosh(query, ix, "ORGANIZATION", neBinary))
+    x = (queryneWhoosh(query, ix, ne, neBinary))
+    return z, y, x
 
 def queryunigramWhoosh(query, open_dir):
     ix = open_dir
@@ -386,13 +385,13 @@ def queryunigramWhoosh(query, open_dir):
         results2.fragmenter = highlight.SentenceFragmenter()
         enum_tokens = {}
         stop_words = set(stopwords.words('english'))
-        stop_words.update(['.', ',', '"', "'", '?', '!', ':', ';', '(', ')', '[', ']', '{', '}'])
+        stop_words.update(['.', ',', '``', '"', "'", '?', '!', ':', ';', '(', ')', '[', ']', '{', '}', '...', '``', "''"])
         for result in results:
             print(result['title'])
             tokens = nltk.word_tokenize(result.highlights("content"))
             tag_tokens = nltk.pos_tag(tokens)
             for token in tag_tokens:
-                if token in enum_tokens.keys() and token not in stop_words:
+                if token in enum_tokens.keys() and token[0] not in stop_words:
                     enum_tokens[token] += 1 * float(result['rank'])
                 else:
                     enum_tokens[token] = 1 * float(result['rank'])
@@ -403,7 +402,7 @@ def queryunigramWhoosh(query, open_dir):
             print(result['title'])
             tokens = nltk.word_tokenize(result.highlights("content"))
             for token in tokens:
-                if token in enum_tokens2.keys() and token not in stop_words:
+                if token in enum_tokens2.keys() and token[0] not in stop_words:
                     enum_tokens2[token] += 1
                 else:
                     enum_tokens2[token] = 1
@@ -419,7 +418,7 @@ def querybigramWhoosh(query, open_dir):
     q2 = qp2.parse(query)
     print("SEARCHING bigrams")
     stop_words = set(stopwords.words('english'))
-    stop_words.update(['.', ',', '"', "'", '?', '!', ':', ';', '(', ')', '[', ']', '{', '}'])
+    stop_words.update(['.', ',', '"', "'", '?', '!', ':', ';', '(', ')', '[', ']', '{', '}', '...', '``', "''"])
     with ix.searcher() as searcher:
         from whoosh import highlight
         results = searcher.search(q)
