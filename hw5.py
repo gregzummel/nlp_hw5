@@ -30,9 +30,7 @@ def readDocuments(document_path):
     return tengrams
 
 def compareVectors(a, b):
-    #convert the wordvector (without stopwords) to number vectors
-    #how do we want to create these vectors? bag of words/unigrams or colocations?
-    #unigrams created.
+
     x = []
     y = []
     for element in a:
@@ -78,7 +76,6 @@ def inQuotes(question):
             else:
                 words_in_quotes.append(word)
     return words_in_quotes
-
 
 def TopPassages(tengrams, question):
     question_tagged = nltk.pos_tag(question)
@@ -132,37 +129,44 @@ def readQuestions(traintest):
     return questions
 
 def main(traintest):
+
     questions = readQuestions(traintest)
     for number in questions.keys():
         question = questions[number]
         guess = questionProcessing(question)
         if guess == "Who":
-            print(str(number) + "main")
-            print()
-            #whoquestion(question, number, traintest)
-        elif guess == "Where":
-            continue
-            #do where
-        elif guess == "How":
-            continue
-            #do how
-        elif guess == "When":
-            continue
-            #do when function
-        elif guess == "What":
-            continue
-            #do what function
-        elif guess == "What is":
-            print(str(number) + "what is")
-            whatisquestion(question)
-        elif guess == "Can":
-            continue
-        elif guess == "Who is":
-            continue
+            print("qid " + str(number))
+            x_all = (whoquestion(question, number, traintest))
+            x_tuples = [word[0] for word in x_all]
+            x = [" ".join(y) for y in x_tuples]
+        # elif guess == "Where":
+        #     x =
+        #     #do where
+        # elif guess == "How":
+        #     continue
+        #     #do how
+        # elif guess == "When":
+        #     continue
+        #     #do when function
+        # elif guess == "What":
+        #     continue
+        #     #do what function
+        # elif guess == "What is":
+        #     print(str(number) + "what is")
+        #     whatisquestion(question)
+        # elif guess == "Can":
+        #     continue
+        # elif guess == "Who is":
+        #     continue
         else:
-            print("else")
-
-    return
+            print("qid " + str(number))
+            whwords = set(['who', 'what', 'when', 'where','how'])
+            query = " ".join(word for word in nltk.word_tokenize(question) if word.lower() not in whwords)
+            x_all = joining(traintest, number, query, "NE", True)
+            x = [word[0][0] for word in x_all[6]]
+        top10 = [y for y in x[-10:]]
+        for y in reversed(top10):
+            print(y)
 
 
 def questionProcessing(question):
@@ -209,6 +213,13 @@ def questionProcessing(question):
 def whoquestion(question, number, traintest):
 
     #process question.
+    #print(question)
+    question = question[:-1]
+    whoset = set(['Who', 'who'])
+    tokens = nltk.word_tokenize(question)
+    question = " ".join(word for word in nltk.word_tokenize(question) if word not in whoset)
+    #print(question)
+
     ne = "PERSON"
     neBinary = False
     stop_words = set(stopwords.words('english'))
@@ -234,12 +245,11 @@ def whatisquestion(question):
 
     #read associated document-- get 10grams
     documentpath = "hw5_data/topdocs/" + traintest + "/top_docs." + str(number)
-    print(number)
+    #print(number)
     tengrams = readDocuments(documentpath)
     sorted_passages = TopPassages(tengrams, question)
     counter = 0
-    for entry in sorted_passages.keys():
-        print(sorted_passages[entry])
+
     ##pattern matching.
     return answer
 def whatquestion(question):
@@ -345,7 +355,7 @@ def queryunigramWhoosh(query, open_dir):
     qp2 = QueryParser('content', ix.schema)
     q = qp.parse(query)
     q2 = qp2.parse(query)
-    print("SEARCHING unigrams")
+    #print("SEARCHING unigrams")
 
     with ix.searcher() as searcher:
         from whoosh import highlight
@@ -368,7 +378,7 @@ def queryunigramWhoosh(query, open_dir):
                     enum_tokens[token] += 1 * float(result['rank'])
                 else:
                     enum_tokens[token] = 1 * float(result['rank'])
-        print(enum_tokens)
+        #print(enum_tokens)
         enum_tokens2 = {}
         for result in results2:
             tokens = nltk.word_tokenize(result.highlights("content"))
@@ -387,7 +397,7 @@ def querybigramWhoosh(query, open_dir):
     qp2 = QueryParser('content', ix.schema)
     q = qp.parse(query)
     q2 = qp2.parse(query)
-    print("SEARCHING bigrams")
+    #print("SEARCHING bigrams")
     stop_words = set(stopwords.words('english'))
     stop_words.update(['.', ',', '"', "'", '?', '!', ':', ';', '(', ')', '[', ']', '{', '}', '...', '``', "''"])
     stop_words.update([word.lower() for word in nltk.word_tokenize(query)])
@@ -427,7 +437,7 @@ def queryneWhoosh(query, open_dir, ne, neBinary):
     qp2 = QueryParser('content', ix.schema)
     q = qp.parse(query)
     q2 = qp2.parse(query)
-    print("SEARCHING ne")
+    #print("SEARCHING ne")
     stop_words = set([word.lower() for word in nltk.word_tokenize(query)])
     with ix.searcher() as searcher:
         from whoosh import highlight
@@ -439,7 +449,7 @@ def queryneWhoosh(query, open_dir, ne, neBinary):
         results2.fragmenter = highlight.SentenceFragmenter()
         enum_tokens = {}
         for result in results:
-            print(result['title'])
+            #print(result['title'])
             tokens = nltk.word_tokenize(result.highlights("content"))
             tagged_tokens = nltk.pos_tag(tokens)
             if neBinary == True:
@@ -454,7 +464,7 @@ def queryneWhoosh(query, open_dir, ne, neBinary):
                     enum_tokens[netuple] = 1 * float(result['rank'])
         enum_tokens2 = {}
         for result in results2:
-            print(result['title'])
+            #print(result['title'])
             tokens = nltk.word_tokenize(result.highlights("content"))
             tagged_tokens = nltk.pos_tag(tokens)
             if neBinary == True:
