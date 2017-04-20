@@ -117,8 +117,6 @@ def TopPassages(tengrams, question):
 def sortDictionary(dictionary):
     return collections.OrderedDict(sorted(dictionary.items()))
 
-
-
 def readQuestions(traintest):
     import codecs
     documentpath = "hw5_data/qadata/" + traintest + "/questions.txt"
@@ -132,8 +130,6 @@ def readQuestions(traintest):
             questions[int(sentences[i][8:-1])] = sentences[i+1][:-1]
 
     return questions
-
-
 
 def main(traintest):
     questions = readQuestions(traintest)
@@ -213,47 +209,56 @@ def questionProcessing(question):
 def whoquestion(question, number, traintest):
     #have a who question. --- LOOKING FOR A PERSON
     #take out stopwords from question
-    question = nltk.word_tokenize(question)
-    question_tagged = nltk.pos_tag(question)
-    stop_words = set(stopwords.words('english'))
-    keywords = list(set(question) - stop_words - set(['who', "Who", "?"]))
-    #read associated document-- get 10grams
-    documentpath = "hw5_data/topdocs/" + traintest + "/top_docs." + str(number)
-    print(number)
-    tengrams = readDocuments(documentpath)
-    sorted_passages = TopPassages(tengrams, question)
+    # question = nltk.word_tokenize(question)
+    # question_tagged = nltk.pos_tag(question)
+    # stop_words = set(stopwords.words('english'))
+    # keywords = list(set(question) - stop_words - set(['who', "Who", "?"]))
+    # #read associated document-- get 10grams
+    # documentpath = "hw5_data/topdocs/" + traintest + "/top_docs." + str(number)
+    # print(number)
+    # tengrams = readDocuments(documentpath)
+    # sorted_passages = TopPassages(tengrams, question)
+    #
+    # counter = 0
+    # ne_list = []
+    # for value in reversed(sorted_passages.keys()):
+    #     print(value)
+    #     if counter > 25:
+    #         break
+    #
+    #     for word_list in sorted_passages[value]:
+    #         pos_list = nltk.pos_tag(word_list)
+    #         tree = (nltk.ne_chunk(pos_list, binary=True))
+    #         for element in tree:
+    #             try:
+    #                 ne = element.label()
+    #                 if ne == "NE":
+    #                     leaves = element.leaves()
+    #                     for leaf in leaves:
+    #                         if leaf[0] not in question:
+    #                             ne_list.append(leaf)
+    #
+    #             except AttributeError:
+    #                 continue
+    #
+    #             counter+=1
+    #
+    # print(word_list)
+    # print(pos_list)
+    # print(tree)
+    # print(ne_list)
+    # print(counter)
 
-    counter = 0
-    ne_list = []
-    for value in reversed(sorted_passages.keys()):
-        print(value)
-        if counter > 25:
-            break
+    #process question.
+    named_entity = "PERSON"
+    stop_words = set(stopwords.words('english')) + set(["Who", "who"])
+    ix = readWhoosh(traintest, number)
 
-        for word_list in sorted_passages[value]:
-            pos_list = nltk.pos_tag(word_list)
-            tree = (nltk.ne_chunk(pos_list, binary=True))
-            for element in tree:
-                try:
-                    ne = element.label()
-                    if ne == "NE":
-                        leaves = element.leaves()
-                        for leaf in leaves:
-                            if leaf[0] not in question:
-                                ne_list.append(leaf)
 
-                except AttributeError:
-                    continue
 
-                counter+=1
+    question =
 
-    print(word_list)
-    print(pos_list)
-    print(tree)
-    print(ne_list)
-    print(counter)
-
-    return
+    return guesses
 
 def whatisquestion(question):
     #looking for descriptors
@@ -277,13 +282,11 @@ def whatisquestion(question):
         print(sorted_passages[entry])
     ##pattern matching.
     return answer
-
 def whatquestion(question):
     #looking for noun
 
     return answer
     #
-
 def wherequestion(question):
 
     return
@@ -297,8 +300,9 @@ def synonyms(word):
     return synonyms[word]
 
 
-def readWhoosh(documentpath, number, question):
-    traintest = 'train'
+
+def readWhoosh(traintest, number):
+
     document_path = "hw5_data/topdocs/" + traintest + "/top_docs." + str(number)
 
     from whoosh.index import create_in
@@ -324,16 +328,11 @@ def readWhoosh(documentpath, number, question):
         #get rid of the '\n'
         sentence = sentences[i]
         sentence = sentence[0:-1]
-
         if intext== True and len(sentence) > 0 and sentence[0] != "<":
-
             text = text+ " " + sentence
-
         elif sentence[0:4] == "Qid:":
             scoreix = sentence.index("Score:") + 7
             score = sentence[int(scoreix):]
-
-
         elif sentence[0:7] == "<DOCNO>":
             try:
                 #get index from the next
@@ -354,41 +353,151 @@ def readWhoosh(documentpath, number, question):
             print(score)
             print(text)
             writer.add_document(title=idnumber, rank=score, content=text)
-
-
             text = ""
 
     writer.commit()
     ix=open_dir("index")
+    return ix
+
+def joining(traintest, number, query, ne, neBinary):
+    ix = readWhoosh(traintest, number)
+    z = queryunigramWhoosh(query, ix)
+    y = (querybigramWhoosh(query, ix))
+    x = (queryneWhoosh(query, ix, "ORGANIZATION", neBinary))
+
+def queryunigramWhoosh(query, open_dir):
+    ix = open_dir
     from whoosh.qparser import QueryParser
     from whoosh import qparser, scoring
     #query = QueryParser("content", ix.schema, group=qparser.OrGroup).parse('question ~ 5')
     qp = QueryParser('content', ix.schema, group=qparser.OrGroup)
     qp2 = QueryParser('content', ix.schema)
-    q = qp.parse('the NFL was established')
-    q2 = qp.parse('the NFL was established')
-    print("SEARCHING")
+    q = qp.parse(query)
+    q2 = qp2.parse(query)
+    print("SEARCHING unigrams")
+
     with ix.searcher() as searcher:
         from whoosh import highlight
         results = searcher.search(q)
-
         results.formatter = highlight.UppercaseFormatter()
         results.fragmenter = highlight.SentenceFragmenter()
-
         results2 = searcher.search(q2)
         results2.formatter = highlight.UppercaseFormatter()
         results2.fragmenter = highlight.SentenceFragmenter()
-
+        enum_tokens = {}
+        stop_words = set(stopwords.words('english'))
+        stop_words.update(['.', ',', '"', "'", '?', '!', ':', ';', '(', ')', '[', ']', '{', '}'])
         for result in results:
-
-            print(result["title"])
-            print(result.highlights("content"))
+            print(result['title'])
+            tokens = nltk.word_tokenize(result.highlights("content"))
+            tag_tokens = nltk.pos_tag(tokens)
+            for token in tag_tokens:
+                if token in enum_tokens.keys() and token not in stop_words:
+                    enum_tokens[token] += 1 * float(result['rank'])
+                else:
+                    enum_tokens[token] = 1 * float(result['rank'])
+        print(enum_tokens)
+        enum_tokens2 = {}
         for result in results2:
             print(result['title'])
-            print(result.highlights("content"))
+            print(result['title'])
+            tokens = nltk.word_tokenize(result.highlights("content"))
+            for token in tokens:
+                if token in enum_tokens2.keys() and token not in stop_words:
+                    enum_tokens2[token] += 1
+                else:
+                    enum_tokens2[token] = 1
+        return enum_tokens, enum_tokens2
 
-        print(len(results), len(results2))
+def querybigramWhoosh(query, open_dir):
+    ix = open_dir
+    from whoosh.qparser import QueryParser
+    from whoosh import qparser, scoring
+    qp = QueryParser('content', ix.schema, group=qparser.OrGroup)
+    qp2 = QueryParser('content', ix.schema)
+    q = qp.parse(query)
+    q2 = qp2.parse(query)
+    print("SEARCHING bigrams")
+    stop_words = set(stopwords.words('english'))
+    stop_words.update(['.', ',', '"', "'", '?', '!', ':', ';', '(', ')', '[', ']', '{', '}'])
+    with ix.searcher() as searcher:
+        from whoosh import highlight
+        results = searcher.search(q)
+        results.formatter = highlight.UppercaseFormatter()
+        results.fragmenter = highlight.SentenceFragmenter()
+        results2 = searcher.search(q2)
+        results2.formatter = highlight.UppercaseFormatter()
+        results2.fragmenter = highlight.SentenceFragmenter()
+        enum_tokens = {}
+        for result in results:
+            print(result['title'])
+            unprocessedtokens = nltk.word_tokenize(result.highlights("content"))
+            tokens = [token for token in unprocessedtokens if token not in stop_words]
+            for bigram in nltk.ngrams(tokens, 2):
+                if bigram in enum_tokens.keys():
+                    enum_tokens[bigram] += 1 * float(result['rank'])
+                else:
+                    enum_tokens[bigram] = 1 * float(result['rank'])
+        print(enum_tokens)
+        enum_tokens2 = {}
+        for result in results2:
+            print(result['title'])
+            print(result['title'])
+            unprocessedtokens = nltk.word_tokenize(result.highlights("content"))
+            tokens = [token for token in unprocessedtokens if token not in stop_words]
+            for token in tokens:
+                if token in enum_tokens2.keys() and token not in set(stopwords.words('english')):
+                    enum_tokens2[token] += 1
+                else:
+                    enum_tokens2[token] = 1
+        return enum_tokens, enum_tokens2
 
-    # results = searcher.search(query)
-    # for result in results:
-    #     print(result['title'])
+def queryneWhoosh(query, open_dir, ne, neBinary):
+    ix = open_dir
+    from whoosh.qparser import QueryParser
+    from whoosh import qparser, scoring
+    qp = QueryParser('content', ix.schema, group=qparser.OrGroup)
+    qp2 = QueryParser('content', ix.schema)
+    q = qp.parse(query)
+    q2 = qp2.parse(query)
+    print("SEARCHING ne")
+
+    with ix.searcher() as searcher:
+        from whoosh import highlight
+        results = searcher.search(q)
+        results.formatter = highlight.UppercaseFormatter()
+        results.fragmenter = highlight.SentenceFragmenter()
+        results2 = searcher.search(q2)
+        results2.formatter = highlight.UppercaseFormatter()
+        results2.fragmenter = highlight.SentenceFragmenter()
+        enum_tokens = {}
+        for result in results:
+            print(result['title'])
+            tokens = nltk.word_tokenize(result.highlights("content"))
+            tagged_tokens = nltk.pos_tag(tokens)
+            if neBinary == True:
+                ne_tree = (nltk.ne_chunk(tagged_tokens, binary=True))
+            else:
+                ne_tree = (nltk.ne_chunk(tagged_tokens))
+            for subtree in ne_tree.subtrees(filter =lambda t: t.label() == ne):
+                netuple = tuple([a for (a,b) in subtree.leaves()])
+                if netuple in enum_tokens.keys():
+                    enum_tokens[netuple] += 1 * float(result['rank'])
+                else:
+                    enum_tokens[netuple] = 1 * float(result['rank'])
+        enum_tokens2 = {}
+        for result in results2:
+            print(result['title'])
+            tokens = nltk.word_tokenize(result.highlights("content"))
+            tagged_tokens = nltk.pos_tag(tokens)
+            if neBinary == True:
+                ne_tree = (nltk.ne_chunk(tagged_tokens, binary=True))
+            else:
+                ne_tree = (nltk.ne_chunk(tagged_tokens))
+            for subtree in ne_tree.subtrees(filter =lambda t: t.label() == ne):
+                netuple = tuple([a for (a,b) in subtree.leaves()])
+                if netuple in enum_tokens2.keys():
+                    enum_tokens2[netuple] += 1 * float(result['rank'])
+                else:
+                    enum_tokens2[netuple] = 1 * float(result['rank'])
+        return enum_tokens, enum_tokens2
