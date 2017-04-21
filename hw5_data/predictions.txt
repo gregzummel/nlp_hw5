@@ -1,0 +1,1017 @@
+qid 0
+Kings
+King
+game
+Howe
+National
+League
+coach
+Tom
+Webster
+%
+qid 1
+painting
+innkeeper
+daughter
+portrait
+paintings
+artist
+auction
+suicide
+price
+record
+qid 2
+beans
+cloves
+vanilla
+bill
+year
+allspice
+import
+report
+Prices
+Java
+qid 3
+trees
+tree
+holiday
+English
+tradition
+city
+Bush
+design
+bells
+Segal
+qid 5
+points
+Iowa
+game
+Illinois
+season
+defense
+times
+football
+San
+Diego
+qid 7
+bread
+PANDORO
+potatoes
+selections
+herb
+sausage
+qid 8
+radioactivity
+iodine
+accident
+report
+radiation
+Chernobyl
+reactor
+power
+parts
+tests
+qid 9
+Andrea
+Meshberger
+Adam
+Pope Julius II
+Sistine Chapel
+Wallace
+Pope John
+Paul II
+Brown
+Jennifer
+qid 10
+men
+eye
+Combe
+product
+Men
+man
+Clairol
+shadow
+month
+majority
+qid 11
+others
+walls
+hydroelectricity
+irrigation
+measure
+snails
+Gunung
+night
+mountain
+Sarawak
+qid 12
+Turner
+Ted
+Noriega
+Gannett OWNS
+Panama
+Ed Turner
+Hoeveler
+Terry Bienstock
+Panamanians
+Sanford Bohrer
+qid 13
+Queen Elizabeth II
+Patrick Upward
+Gerald Cavendish Grosvenor
+Handel
+Messiah
+Wagner
+Paris Bastille
+Dutchman
+Hewlett Packard
+Junghans
+qid 14
+Yersinia
+Gritskova
+Washington
+qid 15
+blood
+anemia
+disorders
+leukemia
+cancer
+marrow
+Bone
+disorder
+deficiencies
+cells
+qid 17
+175
+47
+four
+1927
+37
+2
+1925
+60
+13
+493
+qid 18
+Bethel
+Altamont
+California
+qid 19
+painter
+art
+price
+Sotheby
+auction
+sale
+painting
+drip
+bidding
+artists
+qid 20
+Sunday
+Slew
+Derby
+Silence
+year
+jockey
+Goer
+Easy
+horses
+race
+qid 21
+girl
+Weber
+Brinkley
+Singer
+Powers
+magazine
+way
+contract
+song
+musician
+qid 22
+percent
+states
+census
+bureau
+Michigan
+Pennsylvania
+Illinois
+Iowa
+Dakota
+city
+qid 24
+South
+America
+countries
+Brazil
+president
+country
+Gore
+summit
+Leon
+Mr
+qid 26
+Cincinnati
+Italian
+Pa
+Maalox
+Pampers
+European
+Wisconsin
+Cheboygan
+qid 28
+cell
+people
+exposure
+cancers
+melanoma
+Dr
+form
+year
+carcinoma
+basal
+qid 29
+water
+river
+Lake
+River
+_
+feet
+world
+acre-feet
+Construction
+reservoir
+qid 30
+Leibniz
+Michael Benedikt
+William Gibson
+Foucault
+Habermas
+Bentham
+Shyam Benegal
+Ray
+Michael Hordern
+Hmm
+qid 31
+blood
+home
+Bishop
+children
+technique
+patient
+Infant
+people
+parents
+child
+qid 34
+Dow
+company
+NAME
+NAME
+weapons
+Vietnam
+Henderson
+study
+War
+Orange
+qid 35
+News
+Headline
+news
+networks
+time
+Turner
+service
+dip
+July
+profit
+qid 36
+James Boswell
+Sartre
+Johnson
+Beckett
+Hogarth
+Edmond Malone
+Women WAS
+Jerome Lindon
+Edith Fournier
+Museum
+qid 37
+Pacific Bell
+Freeway Emergencies
+San Diego
+Seal Beach
+Leo
+Todd Murphy
+Reed L
+Pacific
+English
+Stewart
+qid 39
+guitar
+guitars
+Fender
+Strat
+Kaiser
+ash
+Ransom
+friend
+alder
+maple
+qid 40
+BUTLER
+Carlo
+Peter BUTLER
+Popeyes Famous
+Candide
+Lady Macbeth
+co-star Michael BUTLER
+Johann
+McCoy Tyner
+Pianist
+qid 41
+Walton
+Sam Walton
+Sam
+Peggy Smith
+Rabalais
+Don Shinkle
+Paul Carter
+Whyte
+Many Functions
+Hard Copy
+qid 43
+Watson
+Rock Revolution
+Rado
+Ragni
+Milo O'Shea
+George Hearn
+Betty Garrett
+Burke
+Meet Me
+Charlotte Moore
+qid 45
+people
+cages
+tank
+buses
+source
+report
+traffic
+leopards
+money
+Manhattan
+qid 46
+Saddam
+Nebuchadnezzar
+Legend
+Saddam Hussein
+Babylon
+Arab
+Arab WORLD
+Hussein
+Scott Carpenter
+Hayes
+qid 47
+Danforth
+Boston
+Deion Sanders
+Jimmy Buffett
+Ted Turner
+Buffalo
+Vincent
+Doughty
+Barger
+Jan
+qid 48
+Parkinson
+Pont
+Du
+company
+Merck
+marketing
+Vaseretic
+heart
+today
+medicine
+qid 49
+Satanism
+Canadian
+Canada
+Providence
+Eastern
+Christian
+San Francisco
+Starhawk
+American
+Vietnam
+qid 50
+football
+events
+schools
+sweater
+West
+Leprechaun
+Tennant
+speeches
+classes
+parades
+qid 51
+Ziggy
+reggae
+son
+Melody
+band
+music
+children
+Cedella
+crowd
+Jamaica
+qid 52
+Stoll
+Unix
+Milnet
+Alexander Prechtel
+Zimmermann
+Dan Howard
+German
+Optimus
+East Germany
+Watch
+qid 53
+Lunden
+Joan Lunden
+Zahn
+Network
+Charles Gibson
+Hartman
+Michael Krauss
+Paula Zahn
+Sullivan
+Kathleen Sullivan
+qid 54
+Trina Kinast
+Partai Persatuan Pembangunan
+Badan Pembinaan Pendidikan Pelaksanaan Pedoman Penghayatan Dan Pengamalan Pancasila
+Italy
+Circle
+Robertson Boulevard
+Kermit Counts
+Jim Henson
+Mickey
+Mickey Mouse
+qid 55
+builder
+Pennsylvania
+home
+honeymoon
+weekend
+results
+inches
+snow
+sales
+Construction
+qid 56
+Regis
+show
+Philbin
+Frank
+TV
+ABC
+amp
+spokeswoman
+day
+wife
+qid 57
+Russian
+Soviet Union
+Angola
+Australia
+Yakutia
+Japan
+Finland
+Value
+Source
+Cuango
+qid 58
+author
+mart
+K
+Christmas
+entertaining
+book
+year
+cooking
+books
+merchandise
+qid 62
+Henson
+Sesame Street
+Jim Henson
+Mickey Mouse
+Miss
+Miss Piggy
+Fozzie Bear
+Scooter
+Dumbo
+Gonzo
+qid 63
+response
+log
+spill
+Following
+incidents
+spills
+county
+logs
+Northwest
+Care
+qid 65
+six
+600
+nine
+eight
+three
+30
+One
+20
+10
+two
+qid 66
+year
+world
+visitors
+Mediterranean
+years
+countries
+month
+Italy
+Tussaud
+London
+qid 68
+Kellogg
+Rice
+Krispies
+characters
+claim
+Co
+Louie
+box
+Grant
+magazine
+qid 69
+Fain WROTE
+Tin Pan Alley
+Morton Gould
+Fain
+Hilliard
+Walt Disney
+Sammy Fain
+Academy Award
+Never Was
+Emmerich
+qid 70
+Jenninger
+Germans
+Nazi
+speech
+Fuerst
+Welt
+everything
+Adolf
+death
+Germany
+qid 72
+Jones
+Star Wars
+Mickey Mouse
+Grace Jones
+Blackwell
+Willis Street
+Batman
+Ohio Art Co
+Moore WAS
+Barr WAS
+qid 73
+William Conrad
+Simon
+Allie
+Matlock
+Silverman
+George Bush
+Frank
+Diane English
+Mary Tyler Moore
+Bergen
+qid 74
+Manhattan
+AMSTERDAM
+New York Post
+New York
+American
+Style
+Australia
+Columnist
+qid 75
+Park
+Richmond
+Hazel
+Lee
+Reagan
+Annie Snyder
+Urban
+Appomatox
+Antietam
+Monassas
+qid 76
+people
+Sioux
+fire
+battle
+town
+Elk
+Costner
+City
+Rapid
+Spearfish
+qid 77
+Mattel
+doll
+year
+Ken
+toy
+sales
+Fisher-Price
+fashion
+Anika
+dolls
+qid 78
+people
+rains
+rivers
+monsoon
+banks
+India
+summer
+thunderstorms
+Bangladesh
+officials
+qid 79
+cents
+century
+residents
+codes
+side
+mail
+Coast
+New
+quarter
+slices
+qid 80
+Irishman
+Douglas Hyde
+Deaglan de Breadun
+Gaeilge
+English
+Bilingual
+Aberdeen
+Peter
+Seosamh
+Carney
+qid 81
+MALICK
+Hays
+Wayne
+Terence
+Lyndon B
+Kennedy
+Harry Truman
+John MALICK
+Ziegler
+Robert Towne
+qid 82
+Cherry Grove
+Dweck
+Motel Association
+Hotels
+Windy Hill
+Tim Wilkes
+Cherry Grove BEACH
+Garden City
+Jeanette Hardee
+Air Force Base
+qid 83
+music
+composer
+something
+work
+year
+Lindsay
+quartets
+playing
+Schnittke
+Pavilion
+qid 84
+Jodie Foster
+Roger Corman
+Orion
+Jonathan Demme
+Hopkins
+Dole
+Jodie
+Louise
+Oliver Stone
+Barry Levinson
+qid 86
+Johnson
+Shapiro
+Drug Administration
+Braff
+David Braff
+Gamble
+Stroh Brewery Co
+Drug Administration Commissioner
+David Kessler
+Food
+qid 87
+Canadian
+American
+FALLS
+New York
+United States
+Texas
+Chippawa
+Greeley
+Twelve
+Toronto
+qid 88
+Haitian
+Haiti
+United States
+Colombia
+Russian
+Paraguay
+Andean
+EU
+Brazil
+Chile
+qid 89
+Robinson
+Blackwell
+Disco
+Sandra Bernhard
+Daryl Hannah
+Darth Vader
+Paula Abdul
+Emily Lloyd
+Demi Moore
+Kim Basinger
+qid 90
+Productions
+television
+Bandstand
+show
+America
+teen-ager
+American
+years
+March
+music
+qid 91
+Hansley
+Bret Anderson
+Zien
+Hondas
+Classic
+Looby
+Joseph Looby
+qid 92
+Jonathan
+Budman WAS
+Angela Bower
+Judith Light
+Billy
+Gus Farace
+Don Franklin
+Noah Dixon
+Pony Express
+Patrick Hunter
+qid 93
+Bonnie Blair
+Thomas
+Brian Boitano
+Wylie
+Bowman
+Christopher Bowman
+Tonya Harding
+Nancy Kerrigan
+Viktor Petrenko
+Kristi Yamaguchi
+qid 94
+Jessica
+Sandra
+Brunell
+Varivax
+Peterson
+Gary Bruell
+Landecker
+Zovirax
+Kimbro
+Duncan
+qid 95
+Mookie
+Radio Raheem
+Morrell
+Disney
+Forrest
+Mina Tannenbaum
+Jewish Film Festival
+Tim Wallace
+Dorothy
+Scarecrow
+qid 99
+team
+games
+owners
+player
+game
+football
+suit
+USFL
+years
+year
+qid 100
+Einstein
+Salaam
+Dar
+Roger Fouts
+Booth
+Gardner
+Gombe National Park
+Beth Ann Krier
+Gorillas
+Animals
+qid 101
+Princeton
+governor
+office
+station
+Axson
+Link
+government
+fire
+Reagan
+Taylor
+qid 102
+New York
+Gretzky
+EDMONTON
+Boston
+Pocklington
+Los Angeles Kings
+True
+qid 103
+Pepsi
+%
+Coke
+share
+market
+Diet
+Coca-Cola
+drinks
+version
+company
+qid 104
+jackpot
+state
+June
+money
+education
+director
+time
+tickets
+sales
+states
+qid 105
+fruits
+quince
+kumquats
+persimmons
+specialty
+order
+guavas
+sauce
+stalls
+figs
+qid 106
+Yeltsin
+Gorbachev
+Queen Elizabeth II
+William
+Mary
+Reagan
+Bhumibol Adulyadej
+Jan
+Prithvi Narayan Shah
+Birendra
+qid 108
+Lincoln County War
+Hart
+Brushy Bill
+Bonney
+William Brady
+Garrey
+William Bonney
+Henry McCarty
+Walter Noble Burns
+Sheriff Pat Garrett
+qid 109
+Academy Award
+Brian Wilson
+Wilson
+Garrett WROTE
+Wonder
+Lloyd Chiate
+Hurt Sometimes
+Ron Chancey
+Kids
+Thank God
+qid 111
+Wales
+Sydney
+Finlay Calder
+Widnes
+Wembley
+Silk Cut
+Wigan
+Board
+Jacques Fouroux
+Jonathan Devereux
+qid 112
+Guccione
+part
+Thoreson
+emperor
+Roman
+trial
+career
+Wilk
+film
+life
+qid 113
+JOHN STEINBECK
+JOHN
+STEINBECK
+Henry Fonda
+Bristol
+Terkel
+Robert DeMott
+Eleanor Roosevelt
+Nunnally Johnson
+Elaine STEINBECK
+qid 114
+Seuss
+Hilary
+Charles Dickens
+Hall
+Campbell
+Scrooge
+Debbie Camerlynck
+Santa
+Bailey
+Random House
+qid 115
+Molly McIntire
+Kirsten Larson
+Mattel
+Galoob
+Samantha Parkington
+Beverly Johnson
+Matchbook Toys
+Cheryl Tiegs
+Christie Brinkley
+Cara
+qid 116
+CODE
+BAR
+technology
+bags
+ZIP
+machines
+envelope
+codes
+system
+Woodland
+qid 117
+John
+Wayne
+airports
+contract
+safety
+aliens
+year
+exemption
+air
+Fowler
