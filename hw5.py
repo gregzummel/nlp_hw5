@@ -336,7 +336,8 @@ def whenquestion(question, number,traintest):
 
     for s in sentences:
         tengrams.append(s)
-
+    
+    # Use cosine similarity to rank passages
     ranked_passages = {}
     for gram in tengrams:
         words = set(gram) - stop_words
@@ -353,12 +354,11 @@ def whenquestion(question, number,traintest):
             else:
                 ranked_passages[value] = []
                 ranked_passages[value].append(" ".join(words))
-
+    
+    # Sort passages in order of highest "similarity"
     sorted_passages = sortDictionary(ranked_passages)
     counter = 0
 
-    reduced_pass_2=[]
-    ne_q = []
     reduced_pass =[]
     for value in reversed(sorted_passages.keys()):
  #       print(value)
@@ -369,26 +369,21 @@ def whenquestion(question, number,traintest):
 
         for word_list in sorted_passages[value]:
             for word in keywords:
+                # Filter sentences based on the presence of keywords, to increase relevance of selected documents
+                # This filtering helps avoid the low accuracy of a cosine similarity measure alone (see write-up)
                 if word in word_list:
-                    phrases= re.findall(r'\w+\sin\s\d\d\d\d', word_list)
+                    phrases= re.findall(r'\w+\sin\s\d\d\d\d', word_list) # Search for phrases of form "___ in YEAR"
+                    years= re.findall(r'\s\d\d\d\d\s', word_list) # Search for phrases of form "YEAR"
                     phrases = [p for p in phrases if not not p]
-#                    days = re.findall(r'\s[A-Z]\w+\s\d{2}\s', word_list)
-                    years= re.findall(r'\s\d\d\d\d\s', word_list)
                     years = [y for y in years if not not y]
                     dates.append(phrases)
                     dates.append(years)
-#                    dates.append(days)
-#                    print(dates)
                     break
             if not not dates:
                 reduced_pass.append(dates)
-#            for r in reduced_pass:
- #               for s in syn:
-  #                  if s in r:
-   #                     reduced_pass_2.append(r)
-#            print(reduced_pass)
-#        print(counter)
+
         counter+=1
+        
         top_answers = collections.OrderedDict()
         for r in reduced_pass:
             if len(top_answers) == 10: break
@@ -400,14 +395,14 @@ def whenquestion(question, number,traintest):
                             ans = unit
                         elif len(unit.split())==3:
                             ans = unit.split()[2]
-
                         else: ans = unit
+                            
                         if ans not in top_answers.keys():
                             top_answers[ans] = value
                         else:
                             top_answers[ans] = top_answers[ans]+ value
 
-                    if len(top_answers) == 10: break
+                    if len(top_answers) == 10: break # Only store the top 10 answers
     return list(top_answers.keys())
 
 
