@@ -607,14 +607,16 @@ def queryneWhoosh(query, open_dir, ne, neBinary):
         from whoosh import highlight
         results = searcher.search(q)
         results.formatter = highlight.UppercaseFormatter()
-        results.fragmenter = highlight.SentenceFragmenter(charlimit = None)
+        results.fragmenter = highlight.SentenceFragmenter()
         results2 = searcher.search(q2)
         results2.formatter = highlight.UppercaseFormatter()
-        results2.fragmenter = highlight.SentenceFragmenter(charlimit = None)
+        results2.fragmenter = highlight.SentenceFragmenter()
 
         enum_tokens = {}
         for result in results:
-            tokens = nltk.word_tokenize(result.highlights("content"))
+            print(result['title'])
+            print(result.highlights("content"))
+            tokens = nltk.word_tokenize(result.highlights("content", top=5, minscore = 0))
             tagged_tokens = nltk.pos_tag(tokens)
             if neBinary == True:
                 ne_tree = (nltk.ne_chunk(tagged_tokens, binary=True))
