@@ -1,5 +1,14 @@
 import nltk, collections
 from nltk.corpus import stopwords
+import nltk, collections
+from nltk.corpus import stopwords
+from nltk.stem.porter import *
+stemmer = PorterStemmer()
+from nltk.corpus import stopwords
+stop_words = set(stopwords.words('english'))
+import nltk
+from nltk.chunk import conlltags2tree, tree2conlltags
+
 def readDocuments(document_path):
     #documentpath =
     import codecs
@@ -135,36 +144,62 @@ def main(traintest):
         question = questions[number]
         guess = questionProcessing(question)
         if guess == "Who":
-            print("qid " + str(number))
             x_all = (whoquestion(question, number, traintest))
+
+            x_tuples = [word[0] for word in x_all]
+
+            x = [" ".join(y) for y in x_tuples]
+        elif guess == "Where":
+            x_all = (wherequestion(question, number, traintest))
             x_tuples = [word[0] for word in x_all]
             x = [" ".join(y) for y in x_tuples]
-        # elif guess == "Where":
-        #     x =
-        #     #do where
         # elif guess == "How":
         #     continue
         #     #do how
         # elif guess == "When":
-        #     continue
+        #     print("when")
+        #     x = whenquestion(question, number,traintest)
         #     #do when function
-        # elif guess == "What":
-        #     continue
-        #     #do what function
-        # elif guess == "What is":
-        #     print(str(number) + "what is")
-        #     whatisquestion(question)
+        elif guess == "Name":
+            x_all = (whoquestion(question, number, traintest))
+            x_tuples = [word[0] for word in x_all]
+            x = [" ".join(y) for y in x_tuples]
+        elif guess == "When":
+            x_all = whenquestion(question, number, traintest)
+            x = [x.strip() for x in x_all]
+        elif guess == "How":
+            if "many" in question:
+                x = howmuch(traintest, number, question)
+
+            elif "much" in question:
+                x = howmuch(traintest, number, question)
+
+            else:
+                whwords = set(['who', 'what', 'when', 'where','how'])
+                query = " ".join(word for word in nltk.word_tokenize(question) if word.lower() not in whwords)
+                x_all = joining(traintest, number, query, "NE", True)
+                x = [word[0][0] for word in x_all[6]]
+
+            #do what function
+        elif guess == "What":
+            if 'located' in question:
+                x_all = (wherequestion(question, number, traintest))
+                x_tuples = [word[0] for word in x_all]
+                x = [" ".join(y) for y in x_tuples]
+            else:
+                x = generalQuestion(question, traintest, number)
+
         # elif guess == "Can":
         #     continue
         # elif guess == "Who is":
         #     continue
         else:
-            print("qid " + str(number))
             whwords = set(['who', 'what', 'when', 'where','how'])
             query = " ".join(word for word in nltk.word_tokenize(question) if word.lower() not in whwords)
             x_all = joining(traintest, number, query, "NE", True)
             x = [word[0][0] for word in x_all[6]]
         top10 = [y for y in x[-10:]]
+        print("qid " + str(number))
         for y in reversed(top10):
             print(y)
 
@@ -176,7 +211,7 @@ def questionProcessing(question):
     #from nltk.corpus import stopwords
     #stop_words = set(stopwords.words('english'))
     import nltk
-    q_words= nltk.word_tokenize(question)
+    q_words= nltk.word_tokenize(question.lower())
     filtered_words = q_words
     #[word for word in q_words if word not in stop_words]
 
@@ -184,9 +219,8 @@ def questionProcessing(question):
     # quest = filt_q.lower()
 
     #stemming?
-    if "what is" in filtered_words  or "What is" in filtered_words:
-        words = [word for word in filtered_words if "what is" not in word and "What is" not in word] # Maybe reformat the rest like this if this syntax works
-        return("What is")
+    if "name" in filtered_words:
+        return("Name")
     elif "who" in filtered_words  or "Who" in filtered_words:
         words = [word for word in filtered_words if "who" not in word and "Who" not in word] # Maybe reformat the rest like this if this syntax works
         return("Who")
@@ -210,22 +244,48 @@ def questionProcessing(question):
 
     return;
 
-def whoquestion(question, number, traintest):
+def generalQuestion(question, traintest, number):
+    whwords = set(['who', 'what', 'when', 'where','how'])
+    query = " ".join(word for word in nltk.word_tokenize(question) if word.lower() not in whwords)
+    x_all = joining(traintest, number, query, "NE", True)
+    x = [word[0][0] for word in x_all[6]]
+    # tiled = tile(x_all)
+    # print("tiled" + str(tiled))
+    return x
 
-    #process question.
-    #print(question)
+def wherequestion(question, number, traintest):
     question = question[:-1]
-    whoset = set(['Who', 'who'])
+    whoset = set(['where', 'located'])
     tokens = nltk.word_tokenize(question)
-    question = " ".join(word for word in nltk.word_tokenize(question) if word not in whoset)
+    question = " ".join(word for word in nltk.word_tokenize(question) if word.lower() not in whoset)
     #print(question)
 
-    ne = "PERSON"
+    ne = "GPE"
     neBinary = False
     stop_words = set(stopwords.words('english'))
     ix = readWhoosh(traintest, number)
     top_ne = (queryneWhoosh(question, ix, ne, neBinary))
     import operator
+    sorted_x0 = sorted(top_ne[0].items(), key=operator.itemgetter(1))
+    sorted_x1 = sorted(top_ne[1].items(), key=operator.itemgetter(1))
+    guesses = sorted_x0[-10:]
+    return guesses
+
+def whoquestion(question, number, traintest):
+
+    #process question.
+    #print(question)
+    question = question[:-1]
+    whoset = set(['who', 'name', 'is'])
+    tokens = nltk.word_tokenize(question)
+    question = " ".join(word for word in nltk.word_tokenize(question) if word.lower() not in whoset)
+    #print(question)
+    ne = "PERSON"
+    neBinary = False
+    ix = readWhoosh(traintest, number)
+    top_ne = (queryneWhoosh(question, ix, ne, neBinary))
+    import operator
+
     sorted_x0 = sorted(top_ne[0].items(), key=operator.itemgetter(1))
     sorted_x1 = sorted(top_ne[1].items(), key=operator.itemgetter(1))
     guesses = sorted_x0[-10:]
@@ -241,35 +301,139 @@ def whatisquestion(question):
     syns = []
     for word in keywords:
         syns.append(synonyms(word))
-
-
     #read associated document-- get 10grams
     documentpath = "hw5_data/topdocs/" + traintest + "/top_docs." + str(number)
     #print(number)
     tengrams = readDocuments(documentpath)
     sorted_passages = TopPassages(tengrams, question)
-    counter = 0
-
     ##pattern matching.
     return answer
-def whatquestion(question):
-    #looking for noun
 
-    return answer
-    #
-def wherequestion(question):
+def howmuch(traintest, number, question):
+    whwords = set(['who', 'what', 'when', 'where','how', 'many', 'much'])
+    query = " ".join(word for word in nltk.word_tokenize(question) if word.lower() not in whwords)
+    x_all = joining(traintest, number, query, "NE", True)
+    x = [y[0][0] for y in x_all[4] if y[0][1] == 'CD']
+    return x
 
-    return
+def whenquestion(question, number,traintest):
+    from nltk.corpus import wordnet as wn
+    import re
 
-        #how-contains how?
-        #which-contains which
+    question = nltk.word_tokenize(question)
+    keywords = list(set(question) - stop_words - set(['when', "When"]))
+    key_synsets=[]
+    key_syn=[]
+    keywords = [stemmer.stem(k) for k in keywords]
+   # print(keywords)
+    key = question[len(question)-2]
+
+    documentpath = "hw5_data/topdocs/" + traintest + "/top_docs." + str(number)
+
+    sentences = readDocuments(documentpath)
+    tengrams= []
+    dates=[]
+
+    for s in sentences:
+        tengrams.append(s)
+
+    ranked_passages = {}
+    for gram in tengrams:
+        words = set(gram) - stop_words
+        words = [stemmer.stem(k) for k in words]
+        value = compareVectors(words,keywords)
+
+        """"Should we let the words be the keys and the value of the match be the values?
+        all we need to do is make sure that when we look at them to find matches, pick
+        the highest values first. """
+
+        if value != 0:
+            if value in ranked_passages.keys():
+                ranked_passages[value].append(" ".join(words))
+            else:
+                ranked_passages[value] = []
+                ranked_passages[value].append(" ".join(words))
+
+    sorted_passages = sortDictionary(ranked_passages)
+    counter = 0
+
+    reduced_pass_2=[]
+    ne_q = []
+    reduced_pass =[]
+    for value in reversed(sorted_passages.keys()):
+ #       print(value)
+        dates=[]
+        ne_list =[]
+        if counter > 100:
+            break
+
+        for word_list in sorted_passages[value]:
+            for word in keywords:
+                if word in word_list:
+                    phrases= re.findall(r'\w+\sin\s\d\d\d\d', word_list)
+                    phrases = [p for p in phrases if not not p]
+#                    days = re.findall(r'\s[A-Z]\w+\s\d{2}\s', word_list)
+                    years= re.findall(r'\s\d\d\d\d\s', word_list)
+                    years = [y for y in years if not not y]
+                    dates.append(phrases)
+                    dates.append(years)
+#                    dates.append(days)
+#                    print(dates)
+                    break
+            if not not dates:
+                reduced_pass.append(dates)
+#            for r in reduced_pass:
+ #               for s in syn:
+  #                  if s in r:
+   #                     reduced_pass_2.append(r)
+#            print(reduced_pass)
+#        print(counter)
+        counter+=1
+        top_answers = collections.OrderedDict()
+        for r in reduced_pass:
+            if len(top_answers) == 10: break
+            for p in r:
+                ans = ""
+                if not not p:
+                    for unit in p:
+                        if unit.isnumeric():
+                            ans = unit
+                        elif len(unit.split())==3:
+                            ans = unit.split()[2]
+
+                        else: ans = unit
+                        if ans not in top_answers.keys():
+                            top_answers[ans] = value
+                        else:
+                            top_answers[ans] = top_answers[ans]+ value
+
+                    if len(top_answers) == 10: break
+    return list(top_answers.keys())
+
+
+def namethis():
+    question = question[:-1]
+    whoset = set(['who'])
+    tokens = nltk.word_tokenize(question)
+    question = " ".join(word for word in nltk.word_tokenize(question) if word.lower() not in whoset)
+    #print(question)
+    ne = "NE"
+    neBinary = True
+    ix = readWhoosh(traintest, number)
+    top_ne = (queryneWhoosh(question, ix, ne, neBinary))
+    import operator
+
+    sorted_x0 = sorted(top_ne[0].items(), key=operator.itemgetter(1))
+    sorted_x1 = sorted(top_ne[1].items(), key=operator.itemgetter(1))
+    guesses = sorted_x0[-10:]
+    return guesses
+
+
 def synonyms(word):
     from PyDictionary import PyDictionary
     dictionary = PyDictionary()
     synonyms = dictionary.synonym(word, "lxml")
     return synonyms[word]
-
-
 
 def readWhoosh(traintest, number):
 
@@ -277,7 +441,7 @@ def readWhoosh(traintest, number):
 
     from whoosh.index import create_in
     from whoosh.fields import Schema, STORED, NUMERIC, TEXT
-    schema = Schema(title=STORED, rank=STORED, content=TEXT(stored = True))
+    schema = Schema(title=STORED, rank=TEXT(sortable=True), content=TEXT(stored = True))
     import os.path
     if not os.path.exists("index"):
         os.mkdir("index")
@@ -443,13 +607,13 @@ def queryneWhoosh(query, open_dir, ne, neBinary):
         from whoosh import highlight
         results = searcher.search(q)
         results.formatter = highlight.UppercaseFormatter()
-        results.fragmenter = highlight.SentenceFragmenter()
+        results.fragmenter = highlight.SentenceFragmenter(charlimit = None)
         results2 = searcher.search(q2)
         results2.formatter = highlight.UppercaseFormatter()
-        results2.fragmenter = highlight.SentenceFragmenter()
+        results2.fragmenter = highlight.SentenceFragmenter(charlimit = None)
+
         enum_tokens = {}
         for result in results:
-            #print(result['title'])
             tokens = nltk.word_tokenize(result.highlights("content"))
             tagged_tokens = nltk.pos_tag(tokens)
             if neBinary == True:
@@ -522,3 +686,18 @@ def queryneWhoosh(query, open_dir, ne, neBinary):
     # print(tree)
     # print(ne_list)
     # print(counter)
+
+def tile(x):
+    generated = []
+    created_bigrams_words = []
+    for word in reversed(x[6][-10:]):
+        if word not in created_bigrams_words:
+            for bigram in reversed(x[2][-10:]):
+                if word[0][0] in bigram[0] :
+                    newbigram = bigram[0]
+                    score = float(word[1]) + float(bigram[1])
+                    generated.append([bigram[0], score])
+                    created_bigrams_words.append(bigram[0][0])
+                    created_bigrams_words.append(bigram[0][1])
+                    break
+    return generated
