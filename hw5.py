@@ -252,3 +252,22 @@ def whenquestion(question, number,traintest):
 
                     if len(top_answers) == 10: break
     print(top_answers.keys())
+    return
+
+def tiling(unigrams, bigrams, ngrams):
+    uni_words = unigrams.keys()
+    bi_words= bigrams.keys()
+    top_bigr_tiled={}
+    #Unigram, Bigram Tiling
+    for u in uni_words:
+        for b in bi_words:
+            if u in b:
+                top_bigr_tiled[b] = unigrams[u]+ bigrams[b]
+    top_tiled ={}
+    for t in sortDictionary(top_bigr_tiled):
+        for n in n_grams:
+            if t in n:
+                top_tiled[n]= ngrams[n] + top_bigr_tiled[t]
+
+    return top_tiled
+
