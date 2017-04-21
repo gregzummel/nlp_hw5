@@ -213,24 +213,28 @@ def whenquestion(question, number,traintest):
         for word_list in sorted_passages[value]:
             for word in keywords:
                 if word in word_list:
-                    phrases= re.findall(r'\w+\s\w+\s\d\d\d\d', word_list) #Match on "word word YYYY"
-                    phrases = [p for p in phrases if p is not []]
-                    days = re.findall(r'\s[A-Z]\w+\s\d{2}\s', word_list) #Match on "Word DDth"
-                   # print(phrases)
-                    years= re.findall(r'\d\d\d\d+', word_list) # Match on YYYY"
+                    phrases= re.findall(r'\w+\sin\s\d\d\d\d', word_list)
+                    phrases = [p for p in phrases if not not p]
+#                    days = re.findall(r'\s[A-Z]\w+\s\d{2}\s', word_list)
+                    years= re.findall(r'\s\d\d\d\d\s', word_list)
                     years = [y for y in years if not not y]
                     dates.append(phrases)
                     dates.append(years)
-                    dates.append(days)
+#                    dates.append(days)
 #                    print(dates)
+                    break
             if not not dates:
                 reduced_pass.append(dates)
-
+#            for r in reduced_pass:
+ #               for s in syn:
+  #                  if s in r:
+   #                     reduced_pass_2.append(r)
+#            print(reduced_pass)
+#        print(counter)
         counter+=1
-
         top_answers = collections.OrderedDict()
         for r in reduced_pass:
-            if len(top_answers) == 5: break
+            if len(top_answers) == 10: break
             for p in r:
                 ans = ""
                 if not not p:
@@ -239,11 +243,12 @@ def whenquestion(question, number,traintest):
                             ans = unit
                         elif len(unit.split())==3:
                             ans = unit.split()[2]
+
                         else: ans = unit
                         if ans not in top_answers.keys():
                             top_answers[ans] = value
                         else:
-                            top_answers[ans] += value
-                if len(top_answers) == 10: break
-    print(top_answers.keys())
+                            top_answers[ans] = top_answers[ans]+ value
 
+                    if len(top_answers) == 10: break
+    print(top_answers.keys())
